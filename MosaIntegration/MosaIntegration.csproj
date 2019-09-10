@@ -36,16 +36,25 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Modelo\Class1.cs" />
+    <Compile Include="Controlador\Application.cs" />
+    <Compile Include="Controlador\ApplicationProperties.cs" />
+    <Compile Include="Modelo\ApplicationConstants.cs" />
+    <Compile Include="Modelo\CalendarDat.cs" />
+    <Compile Include="Modelo\EstatusDat.cs" />
+    <Compile Include="Modelo\TaquillaDat.cs" />
+    <Compile Include="Modelo\TipoColaDat.cs" />
+    <Compile Include="Modelo\TipoServicioDat.cs" />
     <Compile Include="Modelo\TicketDat.cs" />
+    <Compile Include="Modelo\TransactionDat.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controlador\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

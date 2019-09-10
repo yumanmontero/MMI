@@ -1,8 +1,9 @@
 ﻿{
   "supports": {},
   "dependencies": {
+    "log4net": "2.0.8",
     "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
-    "NETStandard.Library": "1.6.0"
+    "NETStandard.Library": "2.0.3"
   },
   "frameworks": {
     "netstandard1.5": {}
