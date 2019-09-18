@@ -94,6 +94,9 @@ namespace MosaIntegration.Modelo
         public static string testServiceEndpoint = "/validate/";
         public static string tipoColaCRUDEndpoint = "/tipo_colas";
         public static string transaccionCRUDEndpoint = "/tickets/transaccion";
+        public static Boolean modtest = false;
+        public static Boolean moddebug = false;
+        public static string timeZone = "America/La_Paz";
 
     }
 }
