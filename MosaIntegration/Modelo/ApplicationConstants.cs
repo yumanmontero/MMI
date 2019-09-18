@@ -8,8 +8,10 @@ namespace MosaIntegration.Modelo
 {
     class ApplicationConstants
     {
-	    /*System Constrait*/
-	    public static String ACTIVO = "A";
+        public static String appName = "mmi";
+
+        /*System Constrait*/
+        public static String ACTIVO = "A";
         public static String INACTIVO = "I";
         public static String TICKET_NO_ASIGNADO_INDIC_ATEN = "O";
         public static String TICKET_NO_ASIGNADO_INDIC_ACTIVA = "A";

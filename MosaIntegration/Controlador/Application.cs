@@ -12,7 +12,6 @@ namespace MosaIntegration.Controlador
 {
     class Application
     {
-        private static string appName = "mmi";
         private static char sep = Path.DirectorySeparatorChar;
         private static string runDirectory = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
         private static readonly ILog log = LogManager.GetLogger(typeof(Application));
@@ -25,7 +24,7 @@ namespace MosaIntegration.Controlador
 
         public Boolean configuracion()
         {
-            string configFileName = @"" + runDirectory + sep + appName + ".xml";
+            string configFileName = @"" + runDirectory + sep + ApplicationConstants.appName + ".xml";
             Boolean validator = false;
             if (File.Exists(configFileName))
             {
@@ -58,7 +57,7 @@ namespace MosaIntegration.Controlador
 
         public void logIn(String traza)
         {
-
+            
         }
 
     }
