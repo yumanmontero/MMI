@@ -1,0 +1,10 @@
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\log4net.config
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.dll
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.pdb
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\log4net.dll
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\RestSharp.dll
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\log4net.xml
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\RestSharp.xml
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.dll
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.pdb
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\mmi.xml

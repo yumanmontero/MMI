@@ -33,7 +33,9 @@ namespace MosaMosaicIntegration.Modelo
         public String descindatencion;
         public String descindactivo;
         public Boolean existstrx;
+        public String statustransaccion;
         public List<TransactionDat> listtrx;
+
 
         public void configFechaHora()
         {

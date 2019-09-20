@@ -53,6 +53,7 @@
     <Compile Include="Controlador\ApplicationProperties.cs" />
     <Compile Include="Modelo\ApplicationConstants.cs" />
     <Compile Include="Modelo\CalendarDat.cs" />
+    <Compile Include="Modelo\Campo.cs" />
     <Compile Include="Modelo\EstatusDat.cs" />
     <Compile Include="Modelo\TaquillaDat.cs" />
     <Compile Include="Modelo\TicketDat.cs" />
@@ -62,9 +63,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Config\mmi.xml" />
+    <Content Include="mmi.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
