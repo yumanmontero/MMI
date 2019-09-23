@@ -212,7 +212,19 @@ namespace MosaMosaicIntegration.Controlador
             var tipoCierre = lstCampoHeader.Where(x => x.nombre == "tipoCierre").FirstOrDefault().value;
             if(tipoCierre != null)
             {
-
+                if(tipoCierre.Length > 0)
+                {
+                    tk.statustransaccion = tipoCierre;
+                }
+                else
+                {
+                    tk.exists = false;
+                    tk.statustransaccion = "S";
+                }
+            }
+            else
+            {
+                tk.statustransaccion = "S";
             }
 
 
