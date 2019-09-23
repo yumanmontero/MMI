@@ -99,6 +99,16 @@ namespace MosaMosaicIntegration.Modelo
         public static Boolean modtest = false;
         public static Boolean moddebug = false;
         public static string timeZone = "America/La_Paz";
+        public static string codTranLogin = "login";
+        public static string codTranLogout = "logout";
+
+        public static int timeoutGET = 10000;
+        public static int timeoutPOST = 10000;
+        public static int timeoutPUT = 10000;
+        public static int timeoutPATCH = 10000;
+        public static int timeoutDELETE = 10000;
+
+
 
     }
 }
