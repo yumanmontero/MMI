@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo.Mensaje
 {
-    class TaquillaDesactivarResponse
+    class TaquillaActivarResponse
     {
         [JsonProperty("taquilla")]
         public TaquillaDat taquilla { set; get; }

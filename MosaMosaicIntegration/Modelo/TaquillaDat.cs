@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,15 +9,29 @@ namespace MosaMosaicIntegration.Modelo
 {
     class TaquillaDat
     {
-        public Boolean exists;
-        public int nrotaquilla;
-        public int nroterminal;
-        public long codoficina;
-        public String codestatus;
-        public DateTime? fechamodificacion;
-        public long carnetaten;
+        [JsonProperty("exists")]
+        public Boolean exists { set; get; }
 
-        public List<TipoColaDat> tipocola;
+        [JsonProperty("nrotaquilla")]
+        public int nrotaquilla { set; get; }
+
+        [JsonProperty("nroterminal")]
+        public int nroterminal { set; get; }
+
+        [JsonProperty("codoficina")]
+        public long codoficina { set; get; }
+
+        [JsonProperty("codestatus")]
+        public String codestatus { set; get; }
+
+        [JsonProperty("fechamodificacion")]
+        public DateTime? fechamodificacion { set; get; }
+
+        [JsonProperty("carnetaten")]
+        public long carnetaten { set; get; }
+
+        [JsonProperty("username")]
+        public List<TipoColaDat> tipocola { set; get; }
 
 
         public TaquillaDat()

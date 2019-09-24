@@ -100,10 +100,11 @@ namespace MosaMosaicIntegration.Controlador
                     Debug.WriteLine(pa.nombre + " " + pa.tipo + " " + pa.dimension);
                 }*/
                 validator = true;
+                log.Info("Configuración inicializada.");
             }
             else
             {
-                log.Info("Error al Inicializar Configuración MMI");
+                log.Error("Error al Inicializar Configuración MMI");
                 log.Warn("No Existe: " + configFileName);
                 validator = false;
             }
@@ -122,7 +123,7 @@ namespace MosaMosaicIntegration.Controlador
             trazadat = decryptTrace(traza);
             /*Crear request data*/
             TaquillaActivarRequest request = new TaquillaActivarRequest {
-            carnetatencion= trazadat.ticket.carnetatencion.ToString(),
+            carnetatencion= lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
             codoficina = trazadat.ticket.codoficina,
             nroterminal = unchecked((int)trazadat.ticket.nroterminal)
             };
@@ -130,7 +131,41 @@ namespace MosaMosaicIntegration.Controlador
             RestClient client = getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
             RestRequest requestEntity = executeRest(ApplicationConstants.taquillaLogInEndpoint, Method.PATCH, request);
             IRestResponse<TaquillaActivarResponse> response = client.Execute<TaquillaActivarResponse>(requestEntity);
+            //JsonConvert.DeserializeObject()
+            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+            {
+                log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+            }
+            else
+            {
+                log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
+                log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+            }
 
+            return response.Data.estatus.codigo;
+        }
+
+        public String logOut(String traza)
+        {
+            string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+            TrazaDat trazadat = new TrazaDat();
+
+            /*Desencriptar traza*/
+            trazadat = decryptTrace(traza);
+            /*Crear request data*/
+            TaquillaDesactivarRequest request = new TaquillaDesactivarRequest
+            {
+                carnetatencion = lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
+                codoficina = trazadat.ticket.codoficina,
+                nroterminal = unchecked((int)trazadat.ticket.nroterminal)
+            };
+            /*Realizar la peticion*/
+            RestClient client = getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
+            RestRequest requestEntity = executeRest(ApplicationConstants.taquillaLogOutEndpoint, Method.PATCH, request);
+            IRestResponse<TaquillaDesactivarResponse> response = client.Execute<TaquillaDesactivarResponse>(requestEntity);
+            //JsonConvert.DeserializeObject()
             if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
             {
                 log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
@@ -148,9 +183,7 @@ namespace MosaMosaicIntegration.Controlador
 
 
 
-
-
-
+        /*FUNCIONES*/
         public TrazaDat decryptTrace(String traza)
         {
             var arrTransaccion = traza.Split('|');
@@ -204,6 +237,7 @@ namespace MosaMosaicIntegration.Controlador
             return trazadat;
         }
 
+      
         public TicketDat getTicket()
         {
             TicketDat tk = new TicketDat();
@@ -215,7 +249,10 @@ namespace MosaMosaicIntegration.Controlador
             try
             {
                 tk.fechaatencion = lstCampoHeader.Where(x => x.nombre == "fecha").FirstOrDefault().value;
-                tk.fechaatencionD = DateTime.ParseExact(tk.fechaatencion, ApplicationConstants.dfparm, null); 
+                //Debug.WriteLine("fechaatencion: " + tk.fechaatencion);
+                tk.fechaatencionD = DateTime.ParseExact(tk.fechaatencion, ApplicationConstants.dfparm, null);
+                //Debug.WriteLine("fechaatencionD: " + tk.fechaatencionD.HasValue);
+
             }
             catch { tk.exists = false; }
             try
@@ -225,7 +262,7 @@ namespace MosaMosaicIntegration.Controlador
             catch { tk.exists = false; }
             try
             {
-                var carnet = lstCampoHeader.Where(x => x.nombre == "nroFicha").FirstOrDefault().value;
+                var carnet = lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value;
                 if (carnet.StartsWith("b") || carnet.StartsWith("c"))
                 {
                     tk.carnetatencion = long.Parse(lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value.Substring(1));
@@ -319,7 +356,7 @@ namespace MosaMosaicIntegration.Controlador
 
         public RestClient getClientRest(string endpoint, int timeout)
         {
-            RestClient client = new RestClient();
+            RestClient client = new RestClient(endpoint);
             client.Timeout = timeout;
             return client;
         }
@@ -327,6 +364,7 @@ namespace MosaMosaicIntegration.Controlador
         public RestRequest executeRest(string service, RestSharp.Method method, Object requestdat) 
         {
             RestRequest request = new RestRequest(service, method);
+            request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
             request.AddJsonBody(requestdat);
             return request;
         }

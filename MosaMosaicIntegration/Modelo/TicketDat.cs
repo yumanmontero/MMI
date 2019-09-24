@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,33 +9,61 @@ namespace MosaMosaicIntegration.Modelo
 {
     class TicketDat
     {
-        public Int32 nroticket;
-        public Boolean exists;
-        public long codoficina;
-        public Int32 codtipocola;
-        public String destipocola;
-        public long carnetactivacion;
-        public String idcedula;
-        public Int32 nrocedula;
-        public long nroterminal;
-        public String indatencion;
-        public String indactivo;
-        public DateTime? fechaatencionD;
-        public DateTime? horallegadaoficD;
-        public DateTime? horainiatencionD;
-        public DateTime? horafinatencionD;
-        public String fechaatencion;
-        public String horallegadaofic;
-        public String horainiatencion;
-        public String horafinatencion;
-        public long carnetatencion;
-        public Int32 canttransacciones;
-        public String codsigla;
-        public String descindatencion;
-        public String descindactivo;
-        public Boolean existstrx;
-        public String statustransaccion;
-        public List<TransactionDat> listtrx;
+        [JsonProperty("nroticket")]
+        public Int32 nroticket { get; set; }
+        [JsonProperty("exists")]
+        public Boolean exists { get; set; }
+        [JsonProperty("codoficina")]
+        public long codoficina { get; set; }
+        [JsonProperty("codtipocola")]
+        public Int32 codtipocola { get; set; }
+        [JsonProperty("destipocola")]
+        public String destipocola { get; set; }
+        [JsonProperty("carnetactivacion")]
+        public long carnetactivacion { get; set; }
+        [JsonProperty("idcedula")]
+        public String idcedula { get; set; }
+        [JsonProperty("nrocedula")]
+        public Int32 nrocedula { get; set; }
+        [JsonProperty("nroterminal")]
+        public long nroterminal { get; set; }
+        [JsonProperty("indatencion")]
+        public String indatencion { get; set; }
+        [JsonProperty("indactivo")]
+        public String indactivo { get; set; }
+        [JsonProperty("fechaatencionD")]
+        public DateTime? fechaatencionD { get; set; }
+        [JsonProperty("horallegadaoficD")]
+        public DateTime? horallegadaoficD { get; set; }
+        [JsonProperty("horainiatencionD")]
+        public DateTime? horainiatencionD { get; set; }
+        [JsonProperty("horafinatencionD")]
+        public DateTime? horafinatencionD { get; set; }
+        [JsonProperty("fechaatencion")]
+        public String fechaatencion { get; set; }
+        [JsonProperty("horallegadaofic")]
+        public String horallegadaofic { get; set; }
+        [JsonProperty("horainiatencion")]
+        public String horainiatencion { get; set; }
+        [JsonProperty("horafinatencion")]
+        public String horafinatencion { get; set; }
+        [JsonProperty("carnetatencion")]
+        public long carnetatencion { get; set; }
+        [JsonProperty("canttransacciones")]
+        public Int32 canttransacciones { get; set; }
+        [JsonProperty("codsigla")]
+        public String codsigla { get; set; }
+        [JsonProperty("descindatencion")]
+        public String descindatencion { get; set; }
+        [JsonProperty("descindactivo")]
+        public String descindactivo { get; set; }
+        [JsonProperty("existstrx")]
+        public Boolean existstrx { get; set; }
+        [JsonProperty("statustransaccion")]
+        public String statustransaccion { get; set; }
+        [JsonProperty("listtrx")]
+        public List<TransactionDat> listtrx { get; set; }
+
 
 
         public void configFechaHora()

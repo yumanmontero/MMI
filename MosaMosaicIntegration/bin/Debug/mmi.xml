@@ -6,6 +6,13 @@
   <entry key="modetest">false</entry>
   <entry key="debug">true</entry>
   <entry key="timezone">America/La_Paz</entry>
+  <entry key="timeoutGET">10000</entry>
+  <entry key="timeoutPOST">10000</entry>
+  <entry key="timeoutPATCH">10000</entry>
+  <entry key="timeoutPUT">10000</entry>
+  <entry key="timeoutDELETE">10000</entry>
+  <entry key="codtranLogin">LogIn</entry>
+  <entry key="codtranLogout">LogOut</entry>
   <entry key="camposHeader">
       <campo key="oficina" type="number">4</campo>
       <campo key="tipoOficina" type="number">1</campo>

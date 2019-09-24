@@ -59,6 +59,8 @@
     <Compile Include="Modelo\CalendarDat.cs" />
     <Compile Include="Modelo\Campo.cs" />
     <Compile Include="Modelo\EstatusDat.cs" />
+    <Compile Include="Modelo\Mensaje\TaquillaDesactivarResponse.cs" />
+    <Compile Include="Modelo\Mensaje\TaquillaDesactivarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaActivarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaActivarRequest.cs" />
     <Compile Include="Modelo\TaquillaDat.cs" />

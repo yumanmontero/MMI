@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,11 +9,17 @@ namespace MosaMosaicIntegration.Modelo
 {
     class TipoServicioDat
     {
-        public Boolean exists;
-        public int prioridad;
-        public int codtiposervicio;
-        public String destiposervicio;
-        public DateTime? fechamodificacion;
-        public String codestatus;
+        [JsonProperty("exists")]
+        public Boolean exists { get; set; }
+        [JsonProperty("prioridad")]
+        public int prioridad { get; set; }
+        [JsonProperty("codtiposervicio")]
+        public int codtiposervicio { get; set; }
+        [JsonProperty("destiposervicio")]
+        public String destiposervicio { get; set; }
+        [JsonProperty("fechamodificacion")]
+        public DateTime? fechamodificacion { get; set; }
+        [JsonProperty("codestatus")]
+        public String codestatus { get; set; }
     }
 }
