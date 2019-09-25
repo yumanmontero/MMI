@@ -22,3 +22,5 @@ C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\Mos
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csproj.CopyComplete
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.dll
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.pdb
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Json.dll
+C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Json.xml

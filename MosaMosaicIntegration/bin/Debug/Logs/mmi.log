@@ -34,3 +34,39 @@
 2019-09-23 20:41:48,309 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
 2019-09-23 20:41:52,323 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
 2019-09-23 20:41:52,347 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: {"taquilla":{"exists":false,"nrotaquilla":0,"nroterminal":0,"codoficina":0,"codestatus":null,"fechamodificacion":null,"carnetaten":0,"username":[]},"estatus":{"codigo":"0008","mensajeProgramador":["Datos ingresados son invalidos","La taquilla no existe"],"mensajeUsuario":["Datos ingresados son invalidos","La taquilla no existe"]}}
+2019-09-24 09:21:14,294 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 09:26:18,901 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 09:26:29,856 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 09:26:29,863 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: 
+2019-09-24 09:27:10,801 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 09:27:21,519 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 09:27:57,506 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: 
+2019-09-24 09:28:12,236 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 09:28:22,950 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 09:28:22,950 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-24 09:30:46,143 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 09:30:46,165 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 09:30:56,862 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 09:30:56,862 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-24 09:30:56,862 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-24 10:38:44,860 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:38:44,883 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:38:44,888 [vshost.Exec] ERROR MosaMosaicIntegration.Controlador.Application - fechaatencion: 20190919
+2019-09-24 10:38:44,889 [vshost.Exec] ERROR MosaMosaicIntegration.Controlador.Application - fechaatencionD: True
+2019-09-24 10:38:44,974 [vshost.Exec] ERROR MosaMosaicIntegration.Controlador.Application - A 2 20190919102100
+2019-09-24 10:38:56,042 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 10:38:56,042 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-24 10:38:56,042 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-24 10:40:47,088 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:40:47,110 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:43:49,154 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:43:49,178 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:47:58,412 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:47:58,435 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:50:26,099 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:50:26,130 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:54:17,917 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-24 10:54:17,941 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
+2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
