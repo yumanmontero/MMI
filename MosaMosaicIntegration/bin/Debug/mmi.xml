@@ -15,6 +15,7 @@
   <entry key="codtranLogout">LogOut</entry>
   <entry key="camposHeader">
       <campo key="oficina" type="number">4</campo>
+      <campo key="nomredofic" type="string">8</campo>
       <campo key="tipoOficina" type="number">1</campo>
       <campo key="fecha" type="date">8</campo>
       <campo key="tipoEstacion" type="number">1</campo>

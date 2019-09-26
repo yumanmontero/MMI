@@ -189,6 +189,25 @@ namespace MosaMosaicIntegration.Controlador
             }
             try
             {
+                var nom_taq = lstCampoHeader.Where(x => x.nombre == "nomredofic").FirstOrDefault().value;
+                if (nom_taq != null && nom_taq.Count() > 0)
+                {
+                    tk.nom_red_ofic = nom_taq;
+                }
+                else
+                {
+                    tk.nom_red_ofic = System.Net.Dns.GetHostName();
+                }
+            }
+            catch
+            {
+                tk.exists = false;
+                tk.nom_red_ofic = "";
+            }
+
+
+            try
+            {
                 tk.nroterminal = int.Parse(lstCampoHeader.Where(x => x.nombre == "nroTerminal").FirstOrDefault().value);
             }
             catch { tk.exists = false; }

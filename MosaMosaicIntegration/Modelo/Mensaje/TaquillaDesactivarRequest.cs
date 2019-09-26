@@ -8,7 +8,7 @@ namespace MosaMosaicIntegration.Modelo.Mensaje
 {
     class TaquillaDesactivarRequest
     {
-        public int nroterminal { get; set; }
+        public String nom_red_ofic { get; set; }
         public long codoficina { get; set; }
         public String carnetatencion { get; set; }
 

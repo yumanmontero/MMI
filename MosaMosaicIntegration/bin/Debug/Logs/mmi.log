@@ -70,3 +70,57 @@
 2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nroterminal":2360,"codoficina":9272,"carnetatencion":"b526940"}
 2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
 2019-09-24 10:54:58,796 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:31:12,648 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:31:12,672 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:31:12,679 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 1
+2019-09-26 11:31:23,897 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"1","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:31:23,897 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-26 11:31:23,897 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:39:03,553 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:39:03,553 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:39:03,838 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 
+2019-09-26 11:39:24,879 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:39:24,880 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: No es posible conectar con el servidor remoto
+2019-09-26 11:39:24,880 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:40:17,010 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:40:17,010 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:40:17,498 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 
+2019-09-26 11:40:38,524 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:40:38,524 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: No es posible conectar con el servidor remoto
+2019-09-26 11:40:38,524 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:40:41,513 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:40:41,513 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:40:42,278 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 1
+2019-09-26 11:41:03,305 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"1","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:41:03,305 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: No es posible conectar con el servidor remoto
+2019-09-26 11:41:03,305 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:43:43,461 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:43:43,483 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:43:43,489 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 
+2019-09-26 11:43:54,213 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:43:54,213 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-26 11:43:54,213 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:45:33,829 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:45:33,851 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:45:33,856 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 
+2019-09-26 11:45:44,573 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:45:44,574 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-26 11:45:44,574 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:56:45,196 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:56:45,223 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:56:45,228 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Part1
+2019-09-26 11:56:45,228 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: 
+2019-09-26 11:56:45,297 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HN: PC-003120
+2019-09-26 11:56:45,297 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Evn: PC-003120
+2019-09-26 11:56:56,024 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:56:56,024 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-26 11:56:56,024 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn
+2019-09-26 11:57:50,224 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
+2019-09-26 11:57:50,245 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
+2019-09-26 11:57:50,270 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Part2
+2019-09-26 11:57:50,270 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HOSTNAME: PC-003120
+2019-09-26 11:57:50,270 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - HN: PC-003120
+2019-09-26 11:57:50,270 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Evn: PC-003120
+2019-09-26 11:58:00,999 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"PC-003120","codoficina":9272,"carnetatencion":"b526940"}
+2019-09-26 11:58:00,999 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
+2019-09-26 11:58:00,999 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn

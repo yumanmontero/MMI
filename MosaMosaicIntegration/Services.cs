@@ -29,7 +29,7 @@ namespace MosaMosaicIntegration
             {
                 carnetatencion = Application.lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
                 codoficina = trazadat.ticket.codoficina,
-                nroterminal = unchecked((int)trazadat.ticket.nroterminal)
+                nom_red_ofic = trazadat.ticket.nom_red_ofic
             };
             /*Realizar la peticion*/
             RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
@@ -75,7 +75,7 @@ namespace MosaMosaicIntegration
             {
                 carnetatencion = Application.lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
                 codoficina = trazadat.ticket.codoficina,
-                nroterminal = unchecked((int)trazadat.ticket.nroterminal)
+                nom_red_ofic = trazadat.ticket.nom_red_ofic
             };
             /*Realizar la peticion*/
             RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);

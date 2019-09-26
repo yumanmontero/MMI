@@ -63,6 +63,8 @@ namespace MosaMosaicIntegration.Modelo
         public String statustransaccion { get; set; }
         [JsonProperty("listtrx")]
         public List<TransactionDat> listtrx { get; set; }
+        [JsonProperty("nom_red_ofic")]
+        public String nom_red_ofic { get; set; }
 
 
 

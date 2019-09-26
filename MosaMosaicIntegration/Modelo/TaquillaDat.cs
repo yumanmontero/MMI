@@ -15,9 +15,6 @@ namespace MosaMosaicIntegration.Modelo
         [JsonProperty("nrotaquilla")]
         public int nrotaquilla { set; get; }
 
-        [JsonProperty("nroterminal")]
-        public int nroterminal { set; get; }
-
         [JsonProperty("codoficina")]
         public long codoficina { set; get; }
 
@@ -32,6 +29,10 @@ namespace MosaMosaicIntegration.Modelo
 
         [JsonProperty("username")]
         public List<TipoColaDat> tipocola { set; get; }
+
+        [JsonProperty("nom_red_ofic")]
+        public String nom_red_ofic { get; set; }
+
 
 
         public TaquillaDat()
