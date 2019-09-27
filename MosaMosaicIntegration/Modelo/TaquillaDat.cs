@@ -22,7 +22,10 @@ namespace MosaMosaicIntegration.Modelo
         public String codestatus { set; get; }
 
         [JsonProperty("fechamodificacion")]
-        public DateTime? fechamodificacion { set; get; }
+        public String fechamodificacion { set; get; }
+
+        [JsonProperty("fechamodificacionD")]
+        public DateTime? fechamodificacionD { set; get; }
 
         [JsonProperty("carnetaten")]
         public long carnetaten { set; get; }
