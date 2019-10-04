@@ -14,16 +14,30 @@ namespace MosaMosaicIntegration
     class Services
     {
         
-        public static String logIn(String traza)
+
+        public static void servicemmi(String traza, ref long salida)
         {
             Application.configuracion();
-            Application.log.Info("Inicia Operación de LogIn");
-            string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+            Application.log.Info("Lectura de traza");
             TrazaDat trazadat = new TrazaDat();
-
-
+            long codigo = long.Parse(ApplicationConstants.TRANSACCION_EXITOSA);
             /*Desencriptar traza*/
             trazadat = Application.decryptTrace(traza);
+            /*Define la opeción*/
+
+
+
+
+
+
+
+        }
+
+        public static String logIn(TrazaDat trazadat)
+        {
+            Application.log.Info("Inicia Operación de LogIn");
+            string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+
             /*Crear request data*/
             TaquillaActivarRequest request = new TaquillaActivarRequest
             {
@@ -61,15 +75,11 @@ namespace MosaMosaicIntegration
             return codigo;
         }
 
-        public static String logOut(String traza)
+        public static String logOut(TrazaDat trazadat)
         {
-            Application.configuracion();
             Application.log.Info("Inicia Operación de LogOut");
             string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
-            TrazaDat trazadat = new TrazaDat();
 
-            /*Desencriptar traza*/
-            trazadat = Application.decryptTrace(traza);
             /*Crear request data*/
             TaquillaDesactivarRequest request = new TaquillaDesactivarRequest
             {
