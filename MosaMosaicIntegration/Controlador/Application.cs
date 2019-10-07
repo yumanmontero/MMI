@@ -120,11 +120,21 @@ namespace MosaMosaicIntegration.Controlador
             if(traza.ticket.exists)
             {
                 /*Crear request data*/
-                
+                TicketConsultarRequest requestconsltticket = new TicketConsultarRequest
+                {
+                    codoficina=traza.ticket.codoficina,
+                    fechaatencion = traza.ticket.fechaatencion,
+                    idcedula = traza.ticket.idcedula,
+                    nrocedula = traza.ticket.nrocedula,
+                    codtipocola = traza.ticket.codtipocola,
+                    indactivo = traza.ticket.indactivo,
+                    indatencion = traza.ticket.indatencion,
+                    nroticket = traza.ticket.nroticket
+                };
                 /*Realizar la peticion*/
-               /* RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
-                RestRequest requestEntity = Application.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, request);
-                IRestResponse<RESPUESTAOBJECT> response = client.Execute<RESPUESTAOBJECT>(requestEntity);*/
+                /* RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
+                 RestRequest requestEntity = Application.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, request);
+                 IRestResponse<RESPUESTAOBJECT> response = client.Execute<RESPUESTAOBJECT>(requestEntity);*/
                 //JsonConvert.DeserializeObject()
             }
             else
@@ -258,7 +268,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.idcedula = lstCampoHeader.Where(x => x.nombre == "nacionalidadCl").FirstOrDefault().value;
             }
-            catch { tk.nroticket = 0; }
+            catch { tk.idcedula = "N"; }
             try
             {
                 tk.nrocedula = int.Parse(lstCampoHeader.Where(x => x.nombre == "nroCIcl").FirstOrDefault().value);

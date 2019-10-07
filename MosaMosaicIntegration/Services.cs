@@ -136,6 +136,10 @@ namespace MosaMosaicIntegration
             Application.log.Info("Inicia Operación de Registro de Transaccion");
             string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
 
+            /*Validar si el ticket existe*/
+
+
+
             /*Crear request data*/
             TaquillaDesactivarRequest request = new TaquillaDesactivarRequest
             {
