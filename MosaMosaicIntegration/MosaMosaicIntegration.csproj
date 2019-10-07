@@ -59,10 +59,14 @@
     <Compile Include="Modelo\CalendarDat.cs" />
     <Compile Include="Modelo\Campo.cs" />
     <Compile Include="Modelo\EstatusDat.cs" />
+    <Compile Include="Modelo\Mensaje\TicketAgregarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaDesactivarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaDesactivarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaActivarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaActivarRequest.cs" />
+    <Compile Include="Modelo\Mensaje\TicketAgregarResponse.cs" />
+    <Compile Include="Modelo\Mensaje\TransaccionAgregarRequest.cs" />
+    <Compile Include="Modelo\Mensaje\TransaccionAgregarResponse.cs" />
     <Compile Include="Modelo\TaquillaDat.cs" />
     <Compile Include="Modelo\TicketDat.cs" />
     <Compile Include="Modelo\TipoColaDat.cs" />

@@ -51,6 +51,7 @@ namespace MosaMosaicIntegration.Controlador
                 ApplicationConstants.timeZone = param.Where(x => x.key.Equals("timezone")).FirstOrDefault().value;
                 ApplicationConstants.codTranLogin = param.Where(x => x.key.Equals("codtranLogin")).FirstOrDefault().value;
                 ApplicationConstants.codTranLogout = param.Where(x => x.key.Equals("codtranLogout")).FirstOrDefault().value;
+                ApplicationConstants.codTranCallNext = param.Where(x => x.key.Equals("codTranCallNext")).FirstOrDefault().value;
 
                 /*TIMEOUTS*/
                 ApplicationConstants.timeoutGET=  int.Parse(param.Where(x => x.key.Equals("timeoutGET")).FirstOrDefault().value);
@@ -58,7 +59,6 @@ namespace MosaMosaicIntegration.Controlador
                 ApplicationConstants.timeoutPATCH = int.Parse(param.Where(x => x.key.Equals("timeoutPATCH")).FirstOrDefault().value);
                 ApplicationConstants.timeoutPUT = int.Parse(param.Where(x => x.key.Equals("timeoutPUT")).FirstOrDefault().value);
                 ApplicationConstants.timeoutDELETE = int.Parse(param.Where(x => x.key.Equals("timeoutDELETE")).FirstOrDefault().value);
-
 
                 /*Validaciones*/
                 /*Debug.WriteLine("Parametro [timezone] " + ApplicationConstants.timeZone);
@@ -113,6 +113,31 @@ namespace MosaMosaicIntegration.Controlador
 
         }
 
+        /*SEVICIOS*/
+        public static TicketDat cosltTicket(TrazaDat traza)
+        {
+            TicketDat ticket = new TicketDat();
+            if(traza.ticket.exists)
+            {
+                /*Crear request data*/
+                
+                /*Realizar la peticion*/
+               /* RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
+                RestRequest requestEntity = Application.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, request);
+                IRestResponse<RESPUESTAOBJECT> response = client.Execute<RESPUESTAOBJECT>(requestEntity);*/
+                //JsonConvert.DeserializeObject()
+            }
+            else
+            {
+                ticket = traza.ticket;
+            }
+
+
+            return ticket;
+        }
+
+        
+        
         /*FUNCIONES*/
         public static TrazaDat decryptTrace(String traza)
         {
@@ -316,7 +341,15 @@ namespace MosaMosaicIntegration.Controlador
         {
             RestRequest request = new RestRequest(service, method);
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
-            request.AddJsonBody(requestdat);
+            if (method.Equals(Method.GET))
+            {
+                request.AddObject(requestdat);
+            }else
+            {
+               
+                request.AddJsonBody(requestdat);
+            }
+            
             return request;
         }
     }
