@@ -11,6 +11,7 @@ using System.Xml.Linq;
 using System.Diagnostics;
 using RestSharp;
 using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace MosaMosaicIntegration.Controlador
 {
@@ -117,7 +118,7 @@ namespace MosaMosaicIntegration.Controlador
         public static TicketDat cosltTicket(TrazaDat traza)
         {
             TicketDat ticket = new TicketDat();
-            if(traza.ticket.exists)
+            if(traza.ticket.isValid)
             {
                 /*Crear request data*/
                 TicketConsultarRequest requestconsltticket = new TicketConsultarRequest
@@ -132,14 +133,33 @@ namespace MosaMosaicIntegration.Controlador
                     nroticket = traza.ticket.nroticket
                 };
                 /*Realizar la peticion*/
-                /* RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
-                 RestRequest requestEntity = Application.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, request);
-                 IRestResponse<RESPUESTAOBJECT> response = client.Execute<RESPUESTAOBJECT>(requestEntity);*/
+                 RestClient client = Application.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
+                 RestRequest requestEntity = Application.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, requestconsltticket);
+                 IRestResponse<TicketConsultarResponse> response = client.Execute<TicketConsultarResponse>(requestEntity);
                 //JsonConvert.DeserializeObject()
+                /*Tratamiento de respuesta*/
+                Application.log.Info("REQUEST: " + JsonConvert.SerializeObject(requestEntity));
+                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                {
+                    /*Existe ticket*/
+                    Application.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    ticket = response.Data.ticket;
+                    ticket.isValid = true;
+                    ticket.exists = true;
+                    
+                }
+                else if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TICKET_NO_EXISTE))
+                {
+                    /*Ticket no existe*/
+                    ticket = traza.ticket;
+                    ticket.exists = false;
+                }
             }
             else
             {
+                /*ticket no valido - no existe*/
                 ticket = traza.ticket;
+                ticket.exists = false;
             }
 
 
@@ -211,7 +231,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.codoficina = long.Parse(lstCampoHeader.Where(x => x.nombre == "oficina").FirstOrDefault().value);
             }
-            catch{ tk.exists = false;}
+            catch{ tk.isValid = false;}
             try
             {
                 tk.fechaatencion = lstCampoHeader.Where(x => x.nombre == "fecha").FirstOrDefault().value;
@@ -220,7 +240,7 @@ namespace MosaMosaicIntegration.Controlador
                 
 
             }
-            catch { tk.exists = false; 
+            catch { tk.isValid = false; 
             }
             try
             {
@@ -236,7 +256,7 @@ namespace MosaMosaicIntegration.Controlador
             }
             catch
             {
-                tk.exists = false;
+                tk.isValid = false;
                 tk.nom_red_ofic = "";
             }
 
@@ -245,7 +265,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.nroterminal = int.Parse(lstCampoHeader.Where(x => x.nombre == "nroTerminal").FirstOrDefault().value);
             }
-            catch { tk.exists = false; }
+            catch { tk.isValid = false; }
             try
             {
                 var carnet = lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value;
@@ -258,7 +278,7 @@ namespace MosaMosaicIntegration.Controlador
                 }
                 tk.carnetactivacion = tk.carnetatencion;
             }
-            catch { tk.exists = false; }
+            catch { tk.isValid = false; }
             try
             {
                 tk.nroticket = int.Parse(lstCampoHeader.Where(x => x.nombre == "nroFicha").FirstOrDefault().value);
@@ -273,21 +293,21 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.nrocedula = int.Parse(lstCampoHeader.Where(x => x.nombre == "nroCIcl").FirstOrDefault().value);
             }
-            catch { tk.exists = false; }
+            catch { tk.isValid = false; }
             try
             {
                 var datehour = tk.fechaatencion + lstCampoHeader.Where(x => x.nombre == "hhiOperacion").FirstOrDefault().value;
                 tk.horainiatencionD = DateTime.ParseExact(datehour, ApplicationConstants.dfform, null);
                 tk.horainiatencion = tk.horainiatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
             }
-            catch { tk.exists = false; }
+            catch { tk.isValid = false; }
             try
             {
                 var datehour = tk.fechaatencion + lstCampoHeader.Where(x => x.nombre == "hhfOperacion").FirstOrDefault().value;
                 tk.horafinatencionD = DateTime.ParseExact(datehour, ApplicationConstants.dfform, null);
                 tk.horafinatencion = tk.horafinatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
             }
-            catch { tk.exists = false; }
+            catch { tk.isValid = false; }
             try
             {
                 tk.codtipocola = int.Parse(lstCampoHeader.Where(x => x.nombre == "tipoCola").FirstOrDefault().value);
@@ -303,7 +323,7 @@ namespace MosaMosaicIntegration.Controlador
                 }
                 else
                 {
-                    tk.exists = false;
+                    tk.isValid = false;
                     tk.statustransaccion = "S";
                 }
             }
@@ -311,7 +331,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.statustransaccion = "S";
             }
-
+            tk.exists = false;
 
             return tk;
         }
@@ -362,5 +382,20 @@ namespace MosaMosaicIntegration.Controlador
             
             return request;
         }
+
+
+        [DllImport("kernel32.dll")]
+        public static extern IntPtr OpenProcess(
+      int dwDesiredAccess,
+      bool bInheritHandle,
+      int dwProcessId);
+
+        [DllImport("kernel32.dll")]
+        public static extern bool ReadProcessMemory(
+          int hProcess,
+          int lpBaseAddress,
+          byte[] lpBuffer,
+          int dwSize,
+          ref int lpNumberOfBytesRead);
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo.Mensaje
 {
-    class TicketConsultarTicketResponse
+    class TicketConsultarResponse
     {
         [JsonProperty("ticket")]
         public TicketDat ticket { get; set; }

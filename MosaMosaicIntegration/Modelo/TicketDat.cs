@@ -66,6 +66,8 @@ namespace MosaMosaicIntegration.Modelo
         [JsonProperty("nom_red_ofic")]
         public String nom_red_ofic { get; set; }
 
+        public Boolean isValid { get; set; }
+
 
 
         public void configFechaHora()

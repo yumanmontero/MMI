@@ -66,7 +66,7 @@
     <Compile Include="Modelo\Mensaje\TaquillaActivarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TicketAgregarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TicketConsultarRequest.cs" />
-    <Compile Include="Modelo\Mensaje\TicketConsultarTicketResponse.cs" />
+    <Compile Include="Modelo\Mensaje\TicketConsultarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TransaccionAgregarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TransaccionAgregarResponse.cs" />
     <Compile Include="Modelo\TaquillaDat.cs" />
