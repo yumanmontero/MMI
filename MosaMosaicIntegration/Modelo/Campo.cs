@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo
 {
-    class Campo
+    public class Campo
     {
         public String nombre;
         public String tipo;

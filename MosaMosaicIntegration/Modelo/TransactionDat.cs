@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo
 {
-    class TransactionDat
+    public class TransactionDat
     {
         [JsonProperty("exists")]
         public Boolean exists { get; set; }

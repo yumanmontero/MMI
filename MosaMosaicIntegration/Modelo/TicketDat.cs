@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo
 {
-    class TicketDat
+    public class TicketDat
     {
         [JsonProperty("nroticket")]
         public Int32 nroticket { get; set; }

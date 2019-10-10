@@ -35,6 +35,7 @@ namespace MosaMosaicIntegration.Modelo
         public static String TRANSACCION_NO_EXISTE = "0016";
         public static String LISTA_TRANSACCION_VACIA = "0017";
         public static String PETICION_SIN_DATOS = "9000";
+        public static String REGISTRO_INVALIDO = "-2";
         public static String ERROR_DE_COMUNICACION = "9999";
 
         /*DATE FORMAT*/
@@ -102,6 +103,7 @@ namespace MosaMosaicIntegration.Modelo
         public static string codTranLogin = "login";
         public static string codTranLogout = "logout";
         public static string codTranCallNext = "callNext";
+        public static string pathFailed = "";
 
         public static int timeoutGET = 10000;
         public static int timeoutPOST = 10000;

@@ -11,8 +11,10 @@
   <entry key="timeoutPATCH">10000</entry>
   <entry key="timeoutPUT">10000</entry>
   <entry key="timeoutDELETE">10000</entry>
-  <entry key="codtranLogin">LogIn</entry>
-  <entry key="codtranLogout">LogOut</entry>
+  <entry key="codtranLogin">LOGIN</entry>
+  <entry key="codtranLogout">LOGOUT</entry>
+  <entry key="codTranCallNext">CALLNEXT</entry>
+  <entry key="pathFailed">c:/bm_home/mosa</entry>
   <entry key="camposHeader">
       <campo key="oficina" type="number">4</campo>
       <campo key="nomredofic" type="string">8</campo>

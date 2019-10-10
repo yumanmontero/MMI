@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MosaMosaicIntegration.Modelo
 {
-    class TrazaDat
+    public class TrazaDat
     {
         public Boolean wasCompleted;
         public string traza;
