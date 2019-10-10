@@ -1,6 +1,0 @@
-2019-10-07 10:35:37,928 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Configuración inicializada.
-2019-10-07 10:35:37,954 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Lectura de traza
-2019-10-07 10:35:38,079 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Inicia Operación de LogIn
-2019-10-07 10:35:48,712 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - REQUEST: {"nom_red_ofic":"PC-003120","codoficina":9272,"carnetatencion":"b526940"}
-2019-10-07 10:35:48,712 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - RESPONSE: Se excedió el tiempo de espera de la operación
-2019-10-07 10:35:48,712 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.Application - Finaliza Operación de LogIn

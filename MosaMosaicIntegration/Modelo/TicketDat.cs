@@ -67,6 +67,7 @@ namespace MosaMosaicIntegration.Modelo
         public String nom_red_ofic { get; set; }
 
         public Boolean isValid { get; set; }
+        public Int32 nroticketcal { get; set; }
 
 
 

@@ -18,5 +18,6 @@ namespace MosaMosaicIntegration.Modelo.Mensaje
         public String indatencion { get; set; }
         public String indactivo { get; set; }
         public int codtipocola { get; set; }
+        public Boolean allday { get; set; }
     }
 }
