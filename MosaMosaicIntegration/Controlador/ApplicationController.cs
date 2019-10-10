@@ -211,22 +211,84 @@ namespace MosaMosaicIntegration.Controlador
             TicketDat ticketOri = new TicketDat();
             ApplicationController.log.Info("Ticket Antes: " + JsonConvert.SerializeObject(trazadat.ticket));
             /*Validar si el ticket existe*/
-
-            ticketOri =  cosltTicket(trazadat);
-
-            ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
-            /*Agrega o Actualiza el ticket*/
-            if (ticketOri.isValid)
+            /*Si no viene un nro de ticket en la rafaga significa que estamos en presencia o de un ticket registrado por oficina tipo 2 o de un ticket proveniente de una oficina tipo 1*/
+            if (trazadat.ticket.nroticket == 0)
             {
-                if (ticketOri.exists)
-                {/*Actualizar*/
-                    estatusDat = updateTicket(ticketOri, trazadat.ticket);
+                trazadat.ticket.indactivo = ApplicationConstants.TICKET_NO_ASIGNADO_INDIC_ACTIVA;
+                ticketOri = cosltTicket(trazadat, true); /*Buscar ticket de oficina tipo 2*/
+                if (ticketOri.isValid)
+                {
+                    if (ticketOri.exists)
+                    {/*Actualizar*/
+                        trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                        if (ticketOri.indactivo.Equals("K"))
+                        {
+                            trazadat.ticket.indactivo = "P";
+                        }
+                        else if (ticketOri.indactivo.Equals("B"))
+                        {
+                            trazadat.ticket.indactivo = "B";
+                        }
+                        else
+                        {
+                            trazadat.ticket.indactivo = "C";
+                        }
+                        estatusDat = updateTicket(ticketOri, trazadat.ticket);
+                    }
+                    else
+                    {/*Busca si el ticket oficina tipo 1 ya no fue procesado*/
+                        trazadat.ticket.indactivo = null;
+                        ticketOri = cosltTicket(trazadat, false);
+                        if (ticketOri.isValid)
+                        {
+                            if (!ticketOri.exists) /*Esto implica que el ticket es de oficina tipo 1 y no ha sido registrado*/
+                            {/*Crea*/
+                                trazadat.ticket.nroticket = trazadat.ticket.nroticketcal;
+                                trazadat.ticket.indactivo ="F";
+                                trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                                estatusDat = addTicket(trazadat.ticket);
+                            }
+                        }
+                    }
+
                 }
-                else
-                {/*Crea*/
-                    estatusDat =  addTicket(trazadat.ticket);
+            }else
+            {
+                ticketOri = cosltTicket(trazadat, true);
+                /*Agrega o Actualiza el ticket*/
+                if (ticketOri.isValid)
+                {
+                    if (ticketOri.exists)
+                    {/*Actualizar*/
+                        trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                        if (ticketOri.indactivo.Equals("K"))
+                        {
+                            trazadat.ticket.indactivo = "P";
+                        }
+                        else if (ticketOri.indactivo.Equals("B"))
+                        {
+                            trazadat.ticket.indactivo = "B";
+                        }
+                        else
+                        {
+                            trazadat.ticket.indactivo = "C";
+                        }
+                        estatusDat = updateTicket(ticketOri, trazadat.ticket);
+                    }
+                    else
+                    {/*Crea*/
+                        trazadat.ticket.indactivo = "F";
+                        trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                        estatusDat = addTicket(trazadat.ticket);
+                    }
                 }
             }
+            
+         
+
+
+            ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
+            
             /*Ticket valido, Request anterior exitoso y transacciones a registrar*/
             if (ticketOri.isValid && estatusDat.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA) && trazadat.lstTrassaction.Count() > 0)
             {
@@ -257,7 +319,7 @@ namespace MosaMosaicIntegration.Controlador
 
 
         /*SEVICIOS*/
-        public static TicketDat cosltTicket(TrazaDat traza)
+        public static TicketDat cosltTicket(TrazaDat traza, Boolean alldayP)
         {
             TicketDat ticket = new TicketDat();
             if(traza.ticket.isValid)
@@ -272,7 +334,8 @@ namespace MosaMosaicIntegration.Controlador
                     codtipocola = traza.ticket.codtipocola,
                     indactivo = traza.ticket.indactivo,
                     indatencion = traza.ticket.indatencion,
-                    nroticket = traza.ticket.nroticket
+                    nroticket = traza.ticket.nroticket,
+                    allday = alldayP
                 };
                 /*Realizar la peticion*/
                  RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
@@ -601,7 +664,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 tk.codtipocola = int.Parse(lstCampoHeader.Where(x => x.nombre == "tipoCola").FirstOrDefault().value);
             }
-            catch { }
+            catch { tk.isValid = false; }
             //log.Info("codtipocola: " + tk.isValid);
             var tipoCierre = lstCampoHeader.Where(x => x.nombre == "tipoCierre").FirstOrDefault().value;
             if(tipoCierre != null)
@@ -636,6 +699,13 @@ namespace MosaMosaicIntegration.Controlador
             }
            
             tk.exists = false;
+
+            if(tk.isValid && tk.nroticket == 0)
+            {
+                Random random = new Random();
+                int randomNumber = random.Next(10000, 30000);
+                tk.nroticketcal = (tk.codtipocola*100000)+ randomNumber;
+            }
 
             return tk;
         }
