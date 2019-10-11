@@ -26,9 +26,11 @@ namespace MosaMosaicIntegration.Modelo
         [JsonProperty("nrocedula")]
         public long nrocedula { get; set; }
         [JsonProperty("horafintrx")]
-        public DateTime? horafintrx { get; set; }
+        public string horafintrx { get; set; }
+        [JsonProperty("horafintrxD")]
+        public DateTime? horafintrxD { get; set; }
         [JsonProperty("montotrx")]
-        public long montotrx { get; set; }
+        public Decimal montotrx { get; set; }
         [JsonProperty("idtrx")]
         public long idtrx { get; set; }
         [JsonProperty("codtrx")]
@@ -67,6 +69,23 @@ namespace MosaMosaicIntegration.Modelo
                 catch (Exception e)
                 {
                     this.horallegadaoficD = null;
+                }
+            }
+
+            //ggfintra
+            try
+            {
+                this.horafintrxD = DateTime.ParseExact(horafintrx, ApplicationConstants.dfdispdateval, System.Globalization.CultureInfo.InvariantCulture);
+            }
+            catch (Exception i)
+            {
+                try
+                {
+                    this.horafintrxD = new DateTime(long.Parse(horafintrx));
+                }
+                catch (Exception e)
+                {
+                    this.horafintrxD = null;
                 }
             }
 

@@ -13,6 +13,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using RGiesecke.DllExport;
 using log4net;
+using System.IO;
+using System.Reflection;
+using log4net.Config;
 
 namespace MosaMosaicIntegration
 {
@@ -20,12 +23,21 @@ namespace MosaMosaicIntegration
     public class Services
     {
         private static bool publique;
+        private static string runningpathEXE = @"" + Directory.GetCurrentDirectory();
+        private static string runningpathDLL = @"" + Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+
 
         [DllExport("servicemmi", CallingConvention.Cdecl)]
         public static void servicemmi(String traza, ref long salida)
         {
-            ApplicationController.configuracion();
-            ApplicationController.log.Info("Lectura de traza");
+            AppDomain currentDomain = AppDomain.CurrentDomain;
+            currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);
+            changeRunDirectory(runningpathDLL);
+            loadLogConfig();
+
+           ApplicationController.configuracion();
+           //ApplicationController.log.Info("Lectura de traza");
+
             TrazaDat trazadat = new TrazaDat();
             /*Desencriptar traza*/
             trazadat = ApplicationController.decryptTrace(traza);
@@ -51,7 +63,7 @@ namespace MosaMosaicIntegration
             {
                 salida = long.Parse(ApplicationController.registerTrasact(trazadat));
             }
-
+            changeRunDirectory(runningpathEXE);
 
         }
 
@@ -60,7 +72,11 @@ namespace MosaMosaicIntegration
         {
             try
             {
-
+                
+                AppDomain currentDomain = AppDomain.CurrentDomain;
+                currentDomain.AssemblyResolve += new ResolveEventHandler(LoadFromSameFolder);
+                changeRunDirectory(runningpathDLL);
+                loadLogConfig();
                 Boolean asd = ApplicationController.configuracion();
                 if(asd)
                 {
@@ -77,8 +93,32 @@ namespace MosaMosaicIntegration
                 
                 salida = ex.ToString();
             }
+            changeRunDirectory(runningpathEXE);
+
         }
 
+        static Assembly LoadFromSameFolder(object sender, ResolveEventArgs args)
+        {
+            string folderPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string assemblyPath = Path.Combine(folderPath, new AssemblyName(args.Name).Name + ".dll");
+            if (!File.Exists(assemblyPath)) return null;
+            Assembly assembly = Assembly.LoadFrom(assemblyPath);
+            return assembly;
+        }
+
+        private static void loadLogConfig()
+        {
+            using (FileStream fs = new FileStream("log4net.config", FileMode.Open))
+            {
+                XmlConfigurator.Configure(fs);
+            }
+        }
+
+        private static void changeRunDirectory(string ruta)
+        {
+            Directory.SetCurrentDirectory(ruta);
+            Environment.CurrentDirectory = ruta;
+        }
 
         [DllImport("kernel32.dll")]
         public static extern IntPtr OpenProcess(
