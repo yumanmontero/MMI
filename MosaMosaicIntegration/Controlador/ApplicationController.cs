@@ -209,7 +209,9 @@ namespace MosaMosaicIntegration.Controlador
             EstatusDat estatusDat = new EstatusDat();
             estatusDat.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
             TicketDat ticketOri = new TicketDat();
-            ApplicationController.log.Info("Ticket Antes: " + JsonConvert.SerializeObject(trazadat.ticket));
+            TicketModificarResponse typemodf = new TicketModificarResponse();
+            TicketAgregarResponse typeadd = new TicketAgregarResponse();
+            //ApplicationController.log.Info("Ticket Antes: " + JsonConvert.SerializeObject(trazadat.ticket));
             /*Validar si el ticket existe*/
             /*Si no viene un nro de ticket en la rafaga significa que estamos en presencia o de un ticket registrado por oficina tipo 2 o de un ticket proveniente de una oficina tipo 1*/
             if (trazadat.ticket.nroticket == 0)
@@ -233,7 +235,8 @@ namespace MosaMosaicIntegration.Controlador
                         {
                             trazadat.ticket.indactivo = "C";
                         }
-                        estatusDat = updateTicket(ticketOri, trazadat.ticket);
+                        typemodf = updateTicket(ticketOri, trazadat.ticket);
+                        estatusDat = typemodf.estatus;
                     }
                     else
                     {/*Busca si el ticket oficina tipo 1 ya no fue procesado*/
@@ -246,7 +249,14 @@ namespace MosaMosaicIntegration.Controlador
                                 trazadat.ticket.nroticket = trazadat.ticket.nroticketcal;
                                 trazadat.ticket.indactivo ="F";
                                 trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
-                                estatusDat = addTicket(trazadat.ticket);
+                                typeadd = addTicket(trazadat.ticket);
+                                estatusDat = typeadd.estatus;
+                                ticketOri = typeadd.ticket;
+                                ticketOri.isValid = true;
+                            }
+                            else
+                            {
+                                estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
                             }
                         }
                     }
@@ -273,13 +283,17 @@ namespace MosaMosaicIntegration.Controlador
                         {
                             trazadat.ticket.indactivo = "C";
                         }
-                        estatusDat = updateTicket(ticketOri, trazadat.ticket);
+                        typemodf = updateTicket(ticketOri, trazadat.ticket);
+                        estatusDat = typemodf.estatus;
                     }
                     else
                     {/*Crea*/
                         trazadat.ticket.indactivo = "F";
                         trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
-                        estatusDat = addTicket(trazadat.ticket);
+                        typeadd = addTicket(trazadat.ticket);
+                        ticketOri = typeadd.ticket;
+                        estatusDat = typeadd.estatus;
+                        ticketOri.isValid = true;
                     }
                 }
             }
@@ -287,11 +301,15 @@ namespace MosaMosaicIntegration.Controlador
          
 
 
-            ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
+           // ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
             
             /*Ticket valido, Request anterior exitoso y transacciones a registrar*/
             if (ticketOri.isValid && estatusDat.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA) && trazadat.lstTrassaction.Count() > 0)
             {
+                foreach(TransactionDat trx in trazadat.lstTrassaction)
+                {
+                    trx.nroticket = ticketOri.nroticket;
+                }
                 estatusDat = addTransact(trazadat.lstTrassaction);
             }
             else
@@ -385,12 +403,12 @@ namespace MosaMosaicIntegration.Controlador
             return ticket;
         }   
         
-        public static EstatusDat updateTicket(TicketDat ticketOri, TicketDat ticketModf)
+        public static TicketModificarResponse updateTicket(TicketDat ticketOri, TicketDat ticketModf)
         {
             EstatusDat estatusd = new EstatusDat();
-       
-            /*Crear request data*/
-            TicketModificarRequest request = new TicketModificarRequest
+            TicketModificarResponse responsedat = new TicketModificarResponse();
+             /*Crear request data*/
+             TicketModificarRequest request = new TicketModificarRequest
             {
                 ticket_actual = ticketOri,
                 ticket_modif = ticketModf
@@ -405,6 +423,8 @@ namespace MosaMosaicIntegration.Controlador
             {
                 ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                 estatusd = response.Data.estatus;
+                responsedat.ticket_actual = response.Data.ticket_actual;
+                responsedat.ticket_modif = response.Data.ticket_modif;
             }
             else
             {
@@ -420,14 +440,15 @@ namespace MosaMosaicIntegration.Controlador
                 }
 
             }
+            responsedat.estatus = estatusd;
 
-                return estatusd;
+           return responsedat;
         }
 
-        public static EstatusDat addTicket(TicketDat ticketNuevo)
+        public static TicketAgregarResponse addTicket(TicketDat ticketNuevo)
         {
             EstatusDat estatusd = new EstatusDat();
-
+            TicketAgregarResponse responset = new TicketAgregarResponse();
             /*Crear request data*/
             TicketAgregarRequest request = new TicketAgregarRequest
             {
@@ -443,6 +464,7 @@ namespace MosaMosaicIntegration.Controlador
             {
                 ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                 estatusd = response.Data.estatus;
+                responset.ticket = response.Data.ticket;
             }
             else
             {
@@ -459,8 +481,8 @@ namespace MosaMosaicIntegration.Controlador
                 }
 
             }
-
-            return estatusd;
+            responset.estatus = estatusd;
+            return responset;
         }
 
         public static EstatusDat addTransact(List<TransactionDat> lstTransaction)
@@ -492,6 +514,7 @@ namespace MosaMosaicIntegration.Controlador
                 }
                 else
                 {
+                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                     ApplicationController.log.Error("Error en Metodo (addTransact) codigo: " + response.Data.estatus.codigo);
                     estatusd = response.Data.estatus;
                 }
@@ -543,7 +566,7 @@ namespace MosaMosaicIntegration.Controlador
                 {
                     TransactionDat trx = new TransactionDat();
                     trx = getTransaction(i, topbody, ticket.fechaatencionD.Value, arrTransaccion);
-                    if (trx.codtrx != null)
+                    if (trx.codtrx != null && trx.exists)
                     {
                         trx.codoficina = ticket.codoficina;
                         trx.fechaatencion = ticket.fechaatencion;
@@ -714,6 +737,8 @@ namespace MosaMosaicIntegration.Controlador
         {
             string sdate = "";
             TransactionDat trx = new TransactionDat();
+            trx.exists = true;
+            
             try
             {
                 trx.codtrx = arrtrx[ntransac]; 
@@ -722,13 +747,14 @@ namespace MosaMosaicIntegration.Controlador
             ntransac++;
             try
             {
-                trx.montotrx = long.Parse(arrtrx[ntransac]);
+                trx.montotrx = Convert.ToDecimal(arrtrx[ntransac]);
             }
-            catch {  }
+            catch { trx.montotrx = 0; }
                 ntransac++;
             try
             {   sdate = fechaatencion.ToString(ApplicationConstants.dfparm) + arrtrx[ntransac];
-                trx.horafintrx = DateTime.ParseExact(sdate, ApplicationConstants.dfform, null);
+                trx.horafintrxD = DateTime.ParseExact(sdate, ApplicationConstants.dfform, null);
+                trx.horafintrx = trx.horafintrxD.Value.ToString(ApplicationConstants.dfdispdateval);
             }
             catch { trx.exists = false; }
             return trx;
