@@ -235,6 +235,7 @@ namespace MosaMosaicIntegration.Controlador
                         {
                             trazadat.ticket.indactivo = "C";
                         }
+                        ticketOri = normalizeTimeTicket(ticketOri);
                         typemodf = updateTicket(ticketOri, trazadat.ticket);
                         estatusDat = typemodf.estatus;
                     }
@@ -252,6 +253,7 @@ namespace MosaMosaicIntegration.Controlador
                                 typeadd = addTicket(trazadat.ticket);
                                 estatusDat = typeadd.estatus;
                                 ticketOri = typeadd.ticket;
+                                ticketOri = normalizeTimeTicket(ticketOri);
                                 ticketOri.isValid = true;
                             }
                             else
@@ -283,6 +285,7 @@ namespace MosaMosaicIntegration.Controlador
                         {
                             trazadat.ticket.indactivo = "C";
                         }
+                        ticketOri = normalizeTimeTicket(ticketOri);
                         typemodf = updateTicket(ticketOri, trazadat.ticket);
                         estatusDat = typemodf.estatus;
                     }
@@ -292,6 +295,7 @@ namespace MosaMosaicIntegration.Controlador
                         trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
                         typeadd = addTicket(trazadat.ticket);
                         ticketOri = typeadd.ticket;
+                        ticketOri = normalizeTimeTicket(ticketOri);
                         estatusDat = typeadd.estatus;
                         ticketOri.isValid = true;
                     }
@@ -791,6 +795,32 @@ namespace MosaMosaicIntegration.Controlador
             }
 
 
+        }
+
+        private static TicketDat normalizeTimeTicket(TicketDat ticket)
+        {
+            if(ticket.fechaatencionD !=null)
+            {
+                ticket.fechaatencion = ticket.fechaatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
+                ticket.fechaatencionD = null;
+            }
+            if(ticket.horallegadaoficD != null)
+            {
+                ticket.horallegadaofic = ticket.horallegadaoficD.Value.ToString(ApplicationConstants.dfdispdateval);
+                ticket.horallegadaoficD = null;
+            }
+            if (ticket.horainiatencionD != null)
+            {
+                ticket.horainiatencion = ticket.horainiatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
+                ticket.horainiatencionD = null;
+            }
+            if (ticket.horafinatencionD != null)
+            {
+                ticket.horafinatencion = ticket.horafinatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
+                ticket.horafinatencionD = null;
+            }
+
+            return ticket;
         }
 
         public static RestClient getClientRest(string endpoint, int timeout)
