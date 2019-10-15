@@ -122,38 +122,48 @@ namespace MosaMosaicIntegration.Controlador
             ApplicationController.log.Info("Inicia Operación de LogIn");
             string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
 
-            /*Crear request data*/
-            TaquillaActivarRequest request = new TaquillaActivarRequest
+            
+            try
             {
-                carnetatencion = ApplicationController.lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
-                codoficina = trazadat.ticket.codoficina,
-                nom_red_ofic = trazadat.ticket.nom_red_ofic
-            };
-            /*Realizar la peticion*/
-            RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
-            RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.taquillaLogInEndpoint, Method.PATCH, request);
-            IRestResponse<TaquillaActivarResponse> response = client.Execute<TaquillaActivarResponse>(requestEntity);
-            //JsonConvert.DeserializeObject()
-            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                /*Crear request data*/
+                    TaquillaActivarRequest request = new TaquillaActivarRequest
+                    {
+                        carnetatencion = ApplicationController.lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
+                        codoficina = trazadat.ticket.codoficina,
+                        nom_red_ofic = trazadat.ticket.nom_red_ofic
+                    };
+                    /*Realizar la peticion*/
+                    RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
+                    RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.taquillaLogInEndpoint, Method.PATCH, request);
+                    IRestResponse<TaquillaActivarResponse> response = client.Execute<TaquillaActivarResponse>(requestEntity);
+            
+
+                    //JsonConvert.DeserializeObject()
+                    if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                    {
+                        ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                        ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        codigo = response.Data.estatus.codigo;
+                    }
+                    else
+                    {
+                        ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                        if (!response.IsSuccessful)
+                        {
+                            codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                            ApplicationController.log.Info("RESPONSE: " + response.ErrorMessage);
+                        }
+                        else
+                        {
+                            ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                            ApplicationController.log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
+                            codigo = response.Data.estatus.codigo;
+                        }
+                    }
+               }catch(Exception ex)
             {
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                codigo = response.Data.estatus.codigo;
-            }
-            else
-            {
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (!response.IsSuccessful)
-                {
-                    codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
-                    ApplicationController.log.Info("RESPONSE: " + response.ErrorMessage);
-                }
-                else
-                {
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                    ApplicationController.log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
-                    codigo = response.Data.estatus.codigo;
-                }
+                codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (login): " + ex);
             }
             ApplicationController.log.Info("Finaliza Operación de LogIn");
             return codigo;
@@ -163,6 +173,9 @@ namespace MosaMosaicIntegration.Controlador
         {
             ApplicationController.log.Info("Inicia Operación de LogOut");
             string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+
+            try
+            { 
 
             /*Crear request data*/
             TaquillaDesactivarRequest request = new TaquillaDesactivarRequest
@@ -196,6 +209,12 @@ namespace MosaMosaicIntegration.Controlador
                     ApplicationController.log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
                     codigo = response.Data.estatus.codigo;
                 }
+            }
+            }
+            catch (Exception ex)
+            {
+                codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (logout): " + ex);
             }
             ApplicationController.log.Info("Finaliza Operación de LogOut");
             return codigo;
@@ -346,6 +365,8 @@ namespace MosaMosaicIntegration.Controlador
             TicketDat ticket = new TicketDat();
             if(traza.ticket.isValid)
             {
+                try {
+                
                 /*Crear request data*/
                 TicketConsultarRequest requestconsltticket = new TicketConsultarRequest
                 {
@@ -395,6 +416,14 @@ namespace MosaMosaicIntegration.Controlador
                     ticket.exists = false;
                     ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                 }
+                }
+                catch (Exception ex)
+                {
+                    ticket = traza.ticket;
+                    ticket.isValid = false;
+                    ticket.exists = false;
+                    ApplicationController.log.Info("Error [Exception] (cosltTicket): " + ex);
+                }
             }
             else
             {
@@ -411,39 +440,48 @@ namespace MosaMosaicIntegration.Controlador
         {
             EstatusDat estatusd = new EstatusDat();
             TicketModificarResponse responsedat = new TicketModificarResponse();
-             /*Crear request data*/
-             TicketModificarRequest request = new TicketModificarRequest
+            try
             {
-                ticket_actual = ticketOri,
-                ticket_modif = ticketModf
-            };
-            /*Realizar la peticion*/
-            RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
-            RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.PATCH, request);
-            IRestResponse<TicketModificarResponse> response = client.Execute<TicketModificarResponse>(requestEntity);
-            /*Deserializar respuesta*/
-            ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
-            {
-                ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                estatusd = response.Data.estatus;
-                responsedat.ticket_actual = response.Data.ticket_actual;
-                responsedat.ticket_modif = response.Data.ticket_modif;
-            }
-            else
-            {
-                if (!response.IsSuccessful)
+                /*Crear request data*/
+                TicketModificarRequest request = new TicketModificarRequest
                 {
-                    ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
-                    estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    ticket_actual = ticketOri,
+                    ticket_modif = ticketModf
+                };
+                /*Realizar la peticion*/
+                RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPATCH);
+                RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.PATCH, request);
+                IRestResponse<TicketModificarResponse> response = client.Execute<TicketModificarResponse>(requestEntity);
+                /*Deserializar respuesta*/
+                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                {
+                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    estatusd = response.Data.estatus;
+                    responsedat.ticket_actual = response.Data.ticket_actual;
+                    responsedat.ticket_modif = response.Data.ticket_modif;
                 }
                 else
                 {
-                    ApplicationController.log.Error("Error en Metodo (updateTicket) codigo: " + response.Data.estatus.codigo);
-                    estatusd = response.Data.estatus;
-                }
+                    if (!response.IsSuccessful)
+                    {
+                        ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    }
+                    else
+                    {
+                        ApplicationController.log.Error("Error en Metodo (updateTicket) codigo: " + response.Data.estatus.codigo);
+                        estatusd = response.Data.estatus;
+                    }
 
+                }
+            } catch (Exception ex)
+            {
+                estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (updateTicket): " + ex);
             }
+
+
             responsedat.estatus = estatusd;
 
            return responsedat;
@@ -453,6 +491,7 @@ namespace MosaMosaicIntegration.Controlador
         {
             EstatusDat estatusd = new EstatusDat();
             TicketAgregarResponse responset = new TicketAgregarResponse();
+            try { 
             /*Crear request data*/
             TicketAgregarRequest request = new TicketAgregarRequest
             {
@@ -485,6 +524,11 @@ namespace MosaMosaicIntegration.Controlador
                 }
 
             }
+            }catch(Exception ex)
+            {
+                estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (addTicket): " + ex);
+            }
             responset.estatus = estatusd;
             return responset;
         }
@@ -493,36 +537,43 @@ namespace MosaMosaicIntegration.Controlador
         {
             EstatusDat estatusd = new EstatusDat();
 
-            /*Crear request data*/
-            TransaccionAgregarRequest request = new TransaccionAgregarRequest
+            try
             {
-                transacciones = lstTransaction
-            };
-            /*Realizar la peticion*/
-            RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPUT);
-            RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.transaccionCRUDEndpoint, Method.PUT, request);
-            IRestResponse<TransaccionAgregarResponse> response = client.Execute<TransaccionAgregarResponse>(requestEntity);
-            /*Deserializar respuesta*/
-           ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
-            {
-                ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                estatusd = response.Data.estatus;
-            }
-            else
-            {
-                if (!response.IsSuccessful)
+                /*Crear request data*/
+                TransaccionAgregarRequest request = new TransaccionAgregarRequest
                 {
-                    ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
-                    estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    transacciones = lstTransaction
+                };
+                /*Realizar la peticion*/
+                RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPUT);
+                RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.transaccionCRUDEndpoint, Method.PUT, request);
+                IRestResponse<TransaccionAgregarResponse> response = client.Execute<TransaccionAgregarResponse>(requestEntity);
+                /*Deserializar respuesta*/
+                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                {
+                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    estatusd = response.Data.estatus;
                 }
                 else
                 {
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                    ApplicationController.log.Error("Error en Metodo (addTransact) codigo: " + response.Data.estatus.codigo);
-                    estatusd = response.Data.estatus;
-                }
+                    if (!response.IsSuccessful)
+                    {
+                        ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    }
+                    else
+                    {
+                        ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        ApplicationController.log.Error("Error en Metodo (addTransact) codigo: " + response.Data.estatus.codigo);
+                        estatusd = response.Data.estatus;
+                    }
 
+                }
+            }catch(Exception ex)
+            {
+                estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (addTransact): " + ex);
             }
 
             return estatusd;
