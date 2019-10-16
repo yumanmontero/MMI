@@ -11,8 +11,11 @@ C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\mmi.xml
 C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Json.dll
 C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Json.xml
 C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csprojResolveAssemblyReference.cache
+C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csprojAssemblyReference.cache
+C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csproj.CoreCompileInputs.cache
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\mmi.xml
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\log4net.config
+C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.dll.config
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.dll
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.pdb
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\log4net.dll
@@ -20,9 +23,8 @@ C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\New
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\RestSharp.dll
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\log4net.xml
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Json.xml
+C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\RestSharp.pdb
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\RestSharp.xml
-C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csproj.CoreCompileInputs.cache
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csproj.CopyComplete
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.dll
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.pdb
-C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csprojAssemblyReference.cache
