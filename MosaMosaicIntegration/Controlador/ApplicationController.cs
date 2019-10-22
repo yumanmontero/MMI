@@ -139,7 +139,7 @@ namespace MosaMosaicIntegration.Controlador
             
 
                     //JsonConvert.DeserializeObject()
-                    if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                    if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                     {
                         ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
                         ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
@@ -148,7 +148,7 @@ namespace MosaMosaicIntegration.Controlador
                     else
                     {
                         ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                        if (!response.IsSuccessful)
+                        if (!Convert.ToInt16(response.StatusCode).Equals(200))
                         {
                             codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
                             ApplicationController.log.Info("RESPONSE: " + response.ErrorMessage);
@@ -189,7 +189,7 @@ namespace MosaMosaicIntegration.Controlador
             RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.taquillaLogOutEndpoint, Method.PATCH, request);
             IRestResponse<TaquillaDesactivarResponse> response = client.Execute<TaquillaDesactivarResponse>(requestEntity);
             //JsonConvert.DeserializeObject()
-            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+            if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
             {
                 ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
                 ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
@@ -198,7 +198,7 @@ namespace MosaMosaicIntegration.Controlador
             else
             {
                 ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (!response.IsSuccessful)
+                if (!Convert.ToInt16(response.StatusCode).Equals(200))
                 {
                     codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
                     ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
@@ -387,7 +387,7 @@ namespace MosaMosaicIntegration.Controlador
                 //JsonConvert.DeserializeObject()
                 /*Tratamiento de respuesta*/
                 ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(requestEntity));
-                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
                     /*Existe ticket*/
                     ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
@@ -396,13 +396,13 @@ namespace MosaMosaicIntegration.Controlador
                     ticket.exists = true;
                     
                 }
-                else if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TICKET_NO_EXISTE))
+                else if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TICKET_NO_EXISTE))
                 {
                     /*Ticket no existe*/
                     ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                     ticket = traza.ticket;
                     ticket.exists = false;
-                }else if (!response.IsSuccessful)
+                }else if (!Convert.ToInt16(response.StatusCode).Equals(200))
                 {
                     ticket = traza.ticket;
                     ticket.isValid = false;
@@ -454,7 +454,7 @@ namespace MosaMosaicIntegration.Controlador
                 IRestResponse<TicketModificarResponse> response = client.Execute<TicketModificarResponse>(requestEntity);
                 /*Deserializar respuesta*/
                 ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
                     ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                     estatusd = response.Data.estatus;
@@ -463,7 +463,7 @@ namespace MosaMosaicIntegration.Controlador
                 }
                 else
                 {
-                    if (!response.IsSuccessful)
+                    if (!Convert.ToInt16(response.StatusCode).Equals(200))
                     {
                         ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
                         estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
@@ -503,7 +503,7 @@ namespace MosaMosaicIntegration.Controlador
             IRestResponse<TicketAgregarResponse> response = client.Execute<TicketAgregarResponse>(requestEntity);
             /*Deserializar respuesta*/
             ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-            if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+            if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
             {
                 ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                 estatusd = response.Data.estatus;
@@ -511,7 +511,7 @@ namespace MosaMosaicIntegration.Controlador
             }
             else
             {
-                if (!response.IsSuccessful)
+                if (!Convert.ToInt16(response.StatusCode).Equals(200))
                 {
                     ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
                     estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
@@ -550,14 +550,14 @@ namespace MosaMosaicIntegration.Controlador
                 IRestResponse<TransaccionAgregarResponse> response = client.Execute<TransaccionAgregarResponse>(requestEntity);
                 /*Deserializar respuesta*/
                 ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (response.IsSuccessful && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
                     ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
                     estatusd = response.Data.estatus;
                 }
                 else
                 {
-                    if (!response.IsSuccessful)
+                    if (!Convert.ToInt16(response.StatusCode).Equals(200))
                     {
                         ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
                         estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
