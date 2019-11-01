@@ -1,6 +1,0 @@
-2019-10-15 09:59:26,039 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.ApplicationController - Configuración inicializada.
-2019-10-15 09:59:27,289 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.ApplicationController - Inicia Operación de LogIn
-2019-10-15 09:59:28,801 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.ApplicationController - REQUEST: {"nom_red_ofic":"DF9SGS1","codoficina":9217,"carnetatencion":"B103888"}
-2019-10-15 09:59:28,828 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.ApplicationController - RESPONSE: {"taquilla":{"exists":false,"nrotaquilla":0,"codoficina":0,"codestatus":null,"fechamodificacion":null,"fechamodificacionD":null,"carnetaten":0,"username":[],"nom_red_ofic":null},"estatus":{"codigo":"0008","mensajeProgramador":["Datos ingresados son invalidos","La taquilla no existe"],"mensajeUsuario":["Datos ingresados son invalidos","La taquilla no existe"]}}
-2019-10-15 09:59:28,829 [vshost.Exec] ERROR MosaMosaicIntegration.Controlador.ApplicationController - Error en Metodo (logIn) codigo: 0008
-2019-10-15 09:59:28,829 [vshost.Exec] INFO MosaMosaicIntegration.Controlador.ApplicationController - Finaliza Operación de LogIn

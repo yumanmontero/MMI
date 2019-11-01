@@ -5,7 +5,7 @@
   <entry key="serviceEndPoint">http://10.2.21.37:8080/mosa-service</entry>
   <entry key="modetest">false</entry>
   <entry key="debug">true</entry>
-  <entry key="timezone">America/La_Paz</entry>
+  <entry key="timezone">SA Western Standard Time</entry>
   <entry key="timeoutGET">10000</entry>
   <entry key="timeoutPOST">10000</entry>
   <entry key="timeoutPATCH">10000</entry>
@@ -15,6 +15,7 @@
   <entry key="codtranLogout">LOGOUT</entry>
   <entry key="codTranCallNext">CALLNEXT</entry>
   <entry key="pathFailed">c:/bm_home/mosa</entry>
+  <entry key="tcolaoficdefault">1</entry>
   <entry key="camposHeader">
       <campo key="oficina" type="number">4</campo>
       <campo key="nomredofic" type="string">8</campo>

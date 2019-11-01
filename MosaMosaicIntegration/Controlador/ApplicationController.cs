@@ -31,13 +31,17 @@ namespace MosaMosaicIntegration.Controlador
             Console.WriteLine("The current directory is {0}", runDirectory);
             string configFileName = @"" + runDirectory + sep + ApplicationConstants.appName + ".xml";
             Boolean validator = false;
+            lstCampoHeader = new List<Campo>();
+            lstCampoBody = new List<Campo>();
+            lstCampoHeader.Clear();
+            lstCampoBody.Clear();
             if (File.Exists(configFileName))
             {
                 var xml = XDocument.Load(configFileName);
                 var param = from r in xml.Descendants("entry") select new { key = r.Attribute("key").Value, value = r.Value };
                 ApplicationConstants.serviceEndpoint = param.Where(x => x.key.Equals("serviceEndPoint")).FirstOrDefault().value.Trim();
                 try
-                { 
+                {
                     ApplicationConstants.modtest = Boolean.Parse(param.Where(x => x.key.Equals("modetest")).FirstOrDefault().value.Trim());
                     ApplicationConstants.moddebug = Boolean.Parse(param.Where(x => x.key.Equals("debug")).FirstOrDefault().value.Trim());
                 }
@@ -51,18 +55,18 @@ namespace MosaMosaicIntegration.Controlador
                 ApplicationConstants.codTranLogout = param.Where(x => x.key.Equals("codtranLogout")).FirstOrDefault().value;
                 ApplicationConstants.codTranCallNext = param.Where(x => x.key.Equals("codTranCallNext")).FirstOrDefault().value;
                 ApplicationConstants.pathFailed = param.Where(x => x.key.Equals("pathFailed")).FirstOrDefault().value;
-                if(ApplicationConstants.pathFailed != null && ApplicationConstants.pathFailed != "") { } else
+                if (ApplicationConstants.pathFailed != null && ApplicationConstants.pathFailed != "") { } else
                 {
                     ApplicationConstants.pathFailed = runDirectory + sep + "Mosa_To_Batch";
                 }
 
                 /*TIMEOUTS*/
-                ApplicationConstants.timeoutGET=  int.Parse(param.Where(x => x.key.Equals("timeoutGET")).FirstOrDefault().value);
+                ApplicationConstants.timeoutGET = int.Parse(param.Where(x => x.key.Equals("timeoutGET")).FirstOrDefault().value);
                 ApplicationConstants.timeoutPOST = int.Parse(param.Where(x => x.key.Equals("timeoutPOST")).FirstOrDefault().value);
                 ApplicationConstants.timeoutPATCH = int.Parse(param.Where(x => x.key.Equals("timeoutPATCH")).FirstOrDefault().value);
                 ApplicationConstants.timeoutPUT = int.Parse(param.Where(x => x.key.Equals("timeoutPUT")).FirstOrDefault().value);
                 ApplicationConstants.timeoutDELETE = int.Parse(param.Where(x => x.key.Equals("timeoutDELETE")).FirstOrDefault().value);
-
+                ApplicationConstants.tcoladeafult = int.Parse(param.Where(x => x.key.Equals("tcolaoficdefault")).FirstOrDefault().value);
                 /*Validaciones*/
                 /*Debug.WriteLine("Parametro [timezone] " + ApplicationConstants.timeZone);
                 Debug.WriteLine("Parametro [serviceEndpoint] " + ApplicationConstants.serviceEndpoint);
@@ -139,26 +143,27 @@ namespace MosaMosaicIntegration.Controlador
             
 
                     //JsonConvert.DeserializeObject()
-                    if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                    if (Convert.ToInt16((int)response.StatusCode).Equals(200))
+                    {
+                    if (ApplicationConstants.moddebug)
                     {
                         ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
                         ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    }
                         codigo = response.Data.estatus.codigo;
+                        /*Si no existe la taquilla la registra*/
+                        if (codigo.Equals(ApplicationConstants.TAQUILLA_NO_EXISTE))
+                        {
+                            codigo = addTaquilla(trazadat).codigo;
+                        }
                     }
                     else
                     {
+                        
+                        codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    if (ApplicationConstants.moddebug) {
                         ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                        if (!Convert.ToInt16(response.StatusCode).Equals(200))
-                        {
-                            codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
-                            ApplicationController.log.Info("RESPONSE: " + response.ErrorMessage);
-                        }
-                        else
-                        {
-                            ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
-                            ApplicationController.log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
-                            codigo = response.Data.estatus.codigo;
-                        }
+                        ApplicationController.log.Info("RESPONSE: " + response.ErrorMessage); }
                     }
                }catch(Exception ex)
             {
@@ -189,23 +194,29 @@ namespace MosaMosaicIntegration.Controlador
             RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.taquillaLogOutEndpoint, Method.PATCH, request);
             IRestResponse<TaquillaDesactivarResponse> response = client.Execute<TaquillaDesactivarResponse>(requestEntity);
             //JsonConvert.DeserializeObject()
-            if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+            if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
             {
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    if (ApplicationConstants.moddebug)
+                    {
+                        ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
+                        ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    }
                 codigo = response.Data.estatus.codigo;
             }
             else
             {
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (!Convert.ToInt16(response.StatusCode).Equals(200))
+                    if (ApplicationConstants.moddebug)
+                    { ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request)); }
+                if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
                 {
                     codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
-                    ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
                 }
                 else
                 {
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                     ApplicationController.log.Error("Error en Metodo (logIn) codigo: " + response.Data.estatus.codigo);
                     codigo = response.Data.estatus.codigo;
                 }
@@ -225,20 +236,26 @@ namespace MosaMosaicIntegration.Controlador
             ApplicationController.log.Info("Inicia Operación de Registro de Transaccion");
             string codigo = ApplicationConstants.TRANSACCION_EXITOSA;
             Boolean registerLater = false;
+            Boolean redyTicket = false;
+            Boolean redyTransact = false;
             EstatusDat estatusDat = new EstatusDat();
             estatusDat.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
             TicketDat ticketOri = new TicketDat();
             TicketModificarResponse typemodf = new TicketModificarResponse();
             TicketAgregarResponse typeadd = new TicketAgregarResponse();
+    
             //ApplicationController.log.Info("Ticket Antes: " + JsonConvert.SerializeObject(trazadat.ticket));
             /*Validar si el ticket existe*/
             /*Si no viene un nro de ticket en la rafaga significa que estamos en presencia o de un ticket registrado por oficina tipo 2 o de un ticket proveniente de una oficina tipo 1*/
             if (trazadat.ticket.nroticket == 0)
             {
                 trazadat.ticket.indactivo = ApplicationConstants.TICKET_NO_ASIGNADO_INDIC_ACTIVA;
+                int tcolaactual = trazadat.ticket.codtipocola.Value;
+                trazadat.ticket.codtipocola = ApplicationConstants.tcoladeafult;
                 ticketOri = cosltTicket(trazadat, true); /*Buscar ticket de oficina tipo 2*/
                 if (ticketOri.isValid)
                 {
+                    trazadat.ticket.codtipocola = tcolaactual;
                     if (ticketOri.exists)
                     {/*Actualizar*/
                         trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
@@ -255,15 +272,25 @@ namespace MosaMosaicIntegration.Controlador
                             trazadat.ticket.indactivo = "C";
                         }
                         ticketOri = normalizeTimeTicket(ticketOri);
+                        if(ticketOri.horallegadaofic != null)
+                        {
+                            trazadat.ticket.horallegadaofic = null;
+                            trazadat.ticket.horallegadaoficD = null;
+                        }
+
                         typemodf = updateTicket(ticketOri, trazadat.ticket);
                         estatusDat = typemodf.estatus;
+                        redyTicket = true;
                     }
                     else
                     {/*Busca si el ticket oficina tipo 1 ya no fue procesado*/
                         trazadat.ticket.indactivo = null;
+                        String dateaten = trazadat.ticket.fechaatencion;
+                        trazadat.ticket.fechaatencion = trazadat.ticket.horallegadaofic;
                         ticketOri = cosltTicket(trazadat, false);
                         if (ticketOri.isValid)
                         {
+                            trazadat.ticket.fechaatencion = dateaten;
                             if (!ticketOri.exists) /*Esto implica que el ticket es de oficina tipo 1 y no ha sido registrado*/
                             {/*Crea*/
                                 trazadat.ticket.nroticket = trazadat.ticket.nroticketcal;
@@ -274,10 +301,12 @@ namespace MosaMosaicIntegration.Controlador
                                 ticketOri = typeadd.ticket;
                                 ticketOri = normalizeTimeTicket(ticketOri);
                                 ticketOri.isValid = true;
+                                redyTicket = true;
                             }
                             else
                             {
                                 estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+                                redyTicket = true;
                             }
                         }
                     }
@@ -305,27 +334,107 @@ namespace MosaMosaicIntegration.Controlador
                             trazadat.ticket.indactivo = "C";
                         }
                         ticketOri = normalizeTimeTicket(ticketOri);
+                        trazadat.ticket.horallegadaofic = null;
+                        trazadat.ticket.horallegadaoficD = null;
                         typemodf = updateTicket(ticketOri, trazadat.ticket);
                         estatusDat = typemodf.estatus;
+                        redyTicket = true;
+                        foreach(String text in estatusDat.mensajeProgramador){
+                            if (text.ToUpper().Contains("CLIENTE YA FUE ATENDIDO"))
+                            {
+                                if (ApplicationConstants.moddebug)
+                                {
+                                    ApplicationController.log.Info(text);
+                                }
+                                estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+                            }
+                        }
+
                     }
                     else
-                    {/*Crea*/
-                        trazadat.ticket.indactivo = "F";
-                        trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
-                        typeadd = addTicket(trazadat.ticket);
-                        ticketOri = typeadd.ticket;
-                        ticketOri = normalizeTimeTicket(ticketOri);
-                        estatusDat = typeadd.estatus;
-                        ticketOri.isValid = true;
+                    {
+                        /*Preguntar si nos encontramos en presencia de un ticket activado por mosaweb*/
+                        trazadat.ticket.indactivo = ApplicationConstants.TICKET_NO_ASIGNADO_INDIC_ACTIVA;
+                        int tcolaactual = trazadat.ticket.codtipocola.Value;
+                        int nrocedula = trazadat.ticket.nrocedula.Value;
+                        String idcedula = trazadat.ticket.idcedula;
+                        trazadat.ticket.codtipocola = null;
+                        trazadat.ticket.nrocedula = 0;
+                        trazadat.ticket.idcedula = "*";
+                        ticketOri = cosltTicket(trazadat, true);
+                        if (ticketOri.isValid)
+                        {
+                            trazadat.ticket.codtipocola = tcolaactual;
+                            trazadat.ticket.nrocedula = nrocedula;
+                            trazadat.ticket.idcedula = idcedula;
+                            /*Actualiza*/
+                            if (ticketOri.exists)
+                            {
+                                trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                                if (ticketOri.indactivo.Equals("K"))
+                                {
+                                    trazadat.ticket.indactivo = "P";
+                                }
+                                else if (ticketOri.indactivo.Equals("B"))
+                                {
+                                    trazadat.ticket.indactivo = "B";
+                                }
+                                else
+                                {
+                                    trazadat.ticket.indactivo = "C";
+                                }
+                                ticketOri = normalizeTimeTicket(ticketOri);
+                                trazadat.ticket.horallegadaofic = null;
+                                trazadat.ticket.horallegadaoficD = null;
+                                typemodf = updateTicket(ticketOri, trazadat.ticket);
+                                estatusDat = typemodf.estatus;
+                                redyTicket = true;
+                                foreach (String text in estatusDat.mensajeProgramador)
+                                {
+                                    if (text.ToUpper().Contains("CLIENTE YA FUE ATENDIDO"))
+                                    {
+                                        if (ApplicationConstants.moddebug)
+                                        {
+                                            ApplicationController.log.Info(text);
+                                        }
+                                        estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
+                                    }
+                                }
+                            }/*Crea*/
+                            else
+                            {
+                                trazadat.ticket.indactivo = "F";
+                                trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
+                                typeadd = addTicket(trazadat.ticket);
+                                ticketOri = typeadd.ticket;
+                                ticketOri = normalizeTimeTicket(ticketOri);
+                                estatusDat = typeadd.estatus;
+                                ticketOri.isValid = true;
+                                redyTicket = true;
+                            }
+                        }
+
+                     
+                        
                     }
                 }
             }
-            
-         
 
 
-           // ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
-            
+
+
+            // ApplicationController.log.Info("Ticket D: "+ JsonConvert.SerializeObject(ticketOri));
+            if (ApplicationConstants.moddebug)
+            {
+                ApplicationController.log.Info("TicketValid: "+ ticketOri.isValid.ToString() + " Codigo: "+ estatusDat.codigo+ " CantTransacciones: "+ trazadat.lstTrassaction.Count());
+                foreach (TransactionDat trx in trazadat.lstTrassaction)
+                {
+                    ApplicationController.log.Info("TrxID: "+trx.codtrx+ " TrxMonto: "+trx.montotrx+ " Fechafin "+trx.horafintrxD);
+                }
+                
+            }
+
+
             /*Ticket valido, Request anterior exitoso y transacciones a registrar*/
             if (ticketOri.isValid && estatusDat.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA) && trazadat.lstTrassaction.Count() > 0)
             {
@@ -334,6 +443,7 @@ namespace MosaMosaicIntegration.Controlador
                     trx.nroticket = ticketOri.nroticket;
                 }
                 estatusDat = addTransact(trazadat.lstTrassaction);
+                redyTransact = true;
             }
             else
             {
@@ -354,6 +464,12 @@ namespace MosaMosaicIntegration.Controlador
                 registerLaterTrace(trazadat.traza);
             }
             codigo = estatusDat.codigo;
+
+            if (ApplicationConstants.moddebug)
+            {
+                ApplicationController.log.Info("Ticket: " + redyTicket.ToString() + " Transact " + redyTransact.ToString());
+            }
+
             ApplicationController.log.Info("Finaliza Operación de Registro de Transaccion");
             return codigo;
         }
@@ -374,7 +490,7 @@ namespace MosaMosaicIntegration.Controlador
                     fechaatencion = traza.ticket.fechaatencion,
                     idcedula = traza.ticket.idcedula,
                     nrocedula = traza.ticket.nrocedula,
-                    codtipocola = traza.ticket.codtipocola,
+                    codtipocola = traza.ticket.codtipocola.Value,
                     indactivo = traza.ticket.indactivo,
                     indatencion = traza.ticket.indatencion,
                     nroticket = traza.ticket.nroticket,
@@ -384,37 +500,47 @@ namespace MosaMosaicIntegration.Controlador
                  RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutGET);
                  RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.GET, requestconsltticket);
                  IRestResponse<TicketConsultarResponse> response = client.Execute<TicketConsultarResponse>(requestEntity);
-                //JsonConvert.DeserializeObject()
-                /*Tratamiento de respuesta*/
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(requestEntity));
-                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                    //JsonConvert.DeserializeObject()
+                    /*Tratamiento de respuesta*/
+                    if (ApplicationConstants.moddebug)
+                    {
+                        ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(requestconsltticket));
+                    }
+                //TicketConsultarResponse deserializedProduct = JsonConvert.DeserializeObject<TicketConsultarResponse>(response.Content);
+
+
+               if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
-                    /*Existe ticket*/
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        /*Existe ticket*/
+                        if (ApplicationConstants.moddebug)
+                        {ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));}
                     ticket = response.Data.ticket;
                     ticket.isValid = true;
                     ticket.exists = true;
                     
                 }
-                else if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TICKET_NO_EXISTE))
+                else if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TICKET_NO_EXISTE))
                 {
-                    /*Ticket no existe*/
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        /*Ticket no existe*/
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                     ticket = traza.ticket;
                     ticket.exists = false;
-                }else if (!Convert.ToInt16(response.StatusCode).Equals(200))
+                }else if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
                 {
                     ticket = traza.ticket;
                     ticket.isValid = false;
                     ticket.exists = false;
-                    ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
                 }
                 else
                 {
                     ticket = traza.ticket;
                     ticket.isValid = false;
                     ticket.exists = false;
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                 }
                 }
                 catch (Exception ex)
@@ -422,7 +548,7 @@ namespace MosaMosaicIntegration.Controlador
                     ticket = traza.ticket;
                     ticket.isValid = false;
                     ticket.exists = false;
-                    ApplicationController.log.Info("Error [Exception] (cosltTicket): " + ex);
+                    ApplicationController.log.Error("Error [Exception] (cosltTicket): " + ex);
                 }
             }
             else
@@ -453,24 +579,29 @@ namespace MosaMosaicIntegration.Controlador
                 RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.PATCH, request);
                 IRestResponse<TicketModificarResponse> response = client.Execute<TicketModificarResponse>(requestEntity);
                 /*Deserializar respuesta*/
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                if (ApplicationConstants.moddebug)
+                { ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request)); }
+                if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    if (ApplicationConstants.moddebug)
+                    { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                     estatusd = response.Data.estatus;
                     responsedat.ticket_actual = response.Data.ticket_actual;
                     responsedat.ticket_modif = response.Data.ticket_modif;
                 }
                 else
                 {
-                    if (!Convert.ToInt16(response.StatusCode).Equals(200))
+                    if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
                     {
-                        ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
                         estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
                     }
                     else
                     {
                         ApplicationController.log.Error("Error en Metodo (updateTicket) codigo: " + response.Data.estatus.codigo);
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                         estatusd = response.Data.estatus;
                     }
 
@@ -501,25 +632,30 @@ namespace MosaMosaicIntegration.Controlador
             RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPUT);
             RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.ticketCRUDEndpoint, Method.PUT, request);
             IRestResponse<TicketAgregarResponse> response = client.Execute<TicketAgregarResponse>(requestEntity);
-            /*Deserializar respuesta*/
-            ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-            if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                /*Deserializar respuesta*/
+                if (ApplicationConstants.moddebug)
+                { ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request)); }
+
+            if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
             {
-                ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    if (ApplicationConstants.moddebug)
+                    { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                 estatusd = response.Data.estatus;
                 responset.ticket = response.Data.ticket;
             }
             else
             {
-                if (!Convert.ToInt16(response.StatusCode).Equals(200))
+                if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
                 {
-                    ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
                     estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
                 }
                 else
                 {
                     ApplicationController.log.Error("Error en Metodo (addTicket) codigo: " + response.Data.estatus.codigo);
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                     estatusd = response.Data.estatus;
                 }
 
@@ -549,22 +685,26 @@ namespace MosaMosaicIntegration.Controlador
                 RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.transaccionCRUDEndpoint, Method.PUT, request);
                 IRestResponse<TransaccionAgregarResponse> response = client.Execute<TransaccionAgregarResponse>(requestEntity);
                 /*Deserializar respuesta*/
-                ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request));
-                if (Convert.ToInt16(response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                if (ApplicationConstants.moddebug)
+                { ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request)); }
+                if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
                 {
-                    ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                    if (ApplicationConstants.moddebug)
+                    { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                     estatusd = response.Data.estatus;
                 }
                 else
                 {
-                    if (!Convert.ToInt16(response.StatusCode).Equals(200))
+                    if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
                     {
-                        ApplicationController.log.Info("RESPONSE: " + response.Content.ToString());
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
                         estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
                     }
                     else
                     {
-                        ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data));
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
                         ApplicationController.log.Error("Error en Metodo (addTransact) codigo: " + response.Data.estatus.codigo);
                         estatusd = response.Data.estatus;
                     }
@@ -573,12 +713,76 @@ namespace MosaMosaicIntegration.Controlador
             }catch(Exception ex)
             {
                 estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
-                ApplicationController.log.Info("Error [Exception] (addTransact): " + ex);
+                ApplicationController.log.Error("Error [Exception] (addTransact): " + ex);
             }
 
             return estatusd;
         }
         
+        public static EstatusDat addTaquilla(TrazaDat trazadat)
+        {
+            ApplicationController.log.Info("Inicia Operación de Registro de Taquilla");
+            EstatusDat estatusd = new EstatusDat();
+            int nrotaqdat = 0;
+            try
+            {
+                /*Crear request data*/
+                try
+                {
+                    nrotaqdat = Convert.ToInt16(trazadat.ticket.nom_red_ofic.LastOrDefault());
+                }
+                catch
+                {
+                    nrotaqdat = 0;
+                }
+                TaquillaAgregarRequest request = new TaquillaAgregarRequest
+                {
+                    carnetatencion = ApplicationController.lstCampoHeader.Where(x => x.nombre == "carnetUsuario").FirstOrDefault().value,
+                    codoficina = trazadat.ticket.codoficina,
+                    nom_red_ofic = trazadat.ticket.nom_red_ofic,
+                    nrotaq = nrotaqdat,
+                    estado = ApplicationConstants.ACTIVO
+
+                };
+                /*Realizar la peticion*/
+                RestClient client = ApplicationController.getClientRest(ApplicationConstants.serviceEndpoint, ApplicationConstants.timeoutPUT);
+                RestRequest requestEntity = ApplicationController.executeRest(ApplicationConstants.taquillaCRUDEndpoint, Method.PUT, request);
+                IRestResponse<TaquillaAgregarResponse> response = client.Execute<TaquillaAgregarResponse>(requestEntity);
+                /*Deserializar respuesta*/
+                if (ApplicationConstants.moddebug)
+                { ApplicationController.log.Info("REQUEST: " + JsonConvert.SerializeObject(request)); }
+                if (Convert.ToInt16((int)response.StatusCode).Equals(200) && response.Data.estatus.codigo.Equals(ApplicationConstants.TRANSACCION_EXITOSA))
+                {
+                    if (ApplicationConstants.moddebug)
+                    { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
+                    estatusd = response.Data.estatus;
+                }
+                else
+                {
+                    if (!Convert.ToInt16((int)response.StatusCode).Equals(200))
+                    {
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + response.Content.ToString()); }
+                        estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                    }
+                    else
+                    {
+                        ApplicationController.log.Error("Error en Metodo (addTaquilla) codigo: " + response.Data.estatus.codigo);
+                        if (ApplicationConstants.moddebug)
+                        { ApplicationController.log.Info("RESPONSE: " + JsonConvert.SerializeObject(response.Data)); }
+                        estatusd = response.Data.estatus;
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                estatusd.codigo = ApplicationConstants.ERROR_DE_COMUNICACION;
+                ApplicationController.log.Info("Error [Exception] (addTaquilla): " + ex);
+            }
+            return estatusd;
+        }
+
         /*FUNCIONES*/
         public static TrazaDat decryptTrace(String traza)
         {
@@ -601,7 +805,6 @@ namespace MosaMosaicIntegration.Controlador
             TicketDat ticket = new TicketDat();
             ticket = getTicket();
             trazadat.ticket = ticket;
-
             /*Obtiene datos particulares*/
             try
             {
@@ -629,7 +832,7 @@ namespace MosaMosaicIntegration.Controlador
                         trx.horallegadaofic = ticket.horallegadaofic;
                         trx.horallegadaoficD = ticket.horallegadaoficD;
                         trx.idcedula = ticket.idcedula;
-                        trx.nrocedula = ticket.nrocedula;
+                        trx.nrocedula = ticket.nrocedula.Value;
                         trx.nroticket = ticket.nroticket;
                         trazadat.lstTrassaction.Add(trx);
                     }
@@ -639,7 +842,6 @@ namespace MosaMosaicIntegration.Controlador
             {
                 trazadat.wasCompleted = false;
             }
-
 
             return trazadat;
         }
@@ -782,7 +984,16 @@ namespace MosaMosaicIntegration.Controlador
             {
                 Random random = new Random();
                 int randomNumber = random.Next(10000, 30000);
-                tk.nroticketcal = (tk.codtipocola*100000)+ randomNumber;
+                tk.nroticketcal = (tk.codtipocola.Value*100000)+ randomNumber;
+            }
+
+            if (tk.isValid)
+            {
+                ApplicationController.log.Info("Ticket: Registro Valido");
+            }
+            else
+            {
+                ApplicationController.log.Error("Ticket: Registro Invalido");
             }
 
             return tk;
@@ -796,7 +1007,18 @@ namespace MosaMosaicIntegration.Controlador
             
             try
             {
-                trx.codtrx = arrtrx[ntransac]; 
+                trx.codtrx = arrtrx[ntransac];
+                if(trx.codtrx ==null)
+                {
+                    trx.exists = false;
+                }
+                else
+                {
+                    if(trx.codtrx.Length == 0)
+                    {
+                        trx.exists = false;
+                    }
+                }
             }
             catch { trx.exists = false; }
             ntransac++;
@@ -812,6 +1034,16 @@ namespace MosaMosaicIntegration.Controlador
                 trx.horafintrx = trx.horafintrxD.Value.ToString(ApplicationConstants.dfdispdateval);
             }
             catch { trx.exists = false; }
+
+            if (trx.exists)
+            {
+                ApplicationController.log.Info("Transacción: Registro Valido");
+            }
+            else
+            {
+                ApplicationController.log.Error("Transacción: Registro Invalido, CodTrx: "+ trx.codtrx);
+            }
+
             return trx;
         }
 
@@ -852,11 +1084,13 @@ namespace MosaMosaicIntegration.Controlador
         {
             if(ticket.fechaatencionD !=null)
             {
+                
                 ticket.fechaatencion = ticket.fechaatencionD.Value.ToString(ApplicationConstants.dfdispdateval);
                 ticket.fechaatencionD = null;
             }
             if(ticket.horallegadaoficD != null)
             {
+               
                 ticket.horallegadaofic = ticket.horallegadaoficD.Value.ToString(ApplicationConstants.dfdispdateval);
                 ticket.horallegadaoficD = null;
             }
@@ -877,6 +1111,12 @@ namespace MosaMosaicIntegration.Controlador
         public static RestClient getClientRest(string endpoint, int timeout)
         {
             RestClient client = new RestClient(endpoint);
+            // Override with Newtonsoft JSON Handler
+            client.AddHandler("application/json",  NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/x-json", NewtonsoftJsonSerializer.Default);
+            client.AddHandler("text/javascript",  NewtonsoftJsonSerializer.Default);
+            client.AddHandler("*+json",  NewtonsoftJsonSerializer.Default);
             client.Timeout = timeout;
             return client;
         }
@@ -884,7 +1124,9 @@ namespace MosaMosaicIntegration.Controlador
         public static RestRequest executeRest(string service, RestSharp.Method method, Object requestdat) 
         {
             RestRequest request = new RestRequest(service, method);
+            //request.RequestFormat = DataFormat.Json;
             request.OnBeforeDeserialization = resp => { resp.ContentType = "application/json"; };
+
             if (method.Equals(Method.GET))
             {
                 request.AddObject(requestdat);

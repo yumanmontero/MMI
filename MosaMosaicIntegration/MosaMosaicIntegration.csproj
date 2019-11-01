@@ -55,16 +55,19 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controlador\ApplicationController.cs" />
     <Compile Include="Controlador\ApplicationProperties.cs" />
+    <Compile Include="Controlador\MicrosecondEpochConverter.cs" />
+    <Compile Include="Controlador\NewtonsoftJsonSerializer.cs" />
     <Compile Include="Modelo\ApplicationConstants.cs" />
     <Compile Include="Modelo\CalendarDat.cs" />
     <Compile Include="Modelo\Campo.cs" />
     <Compile Include="Modelo\EstatusDat.cs" />
+    <Compile Include="Modelo\Mensaje\TaquillaAgregarResponse.cs" />
+    <Compile Include="Modelo\Mensaje\TaquillaAgregarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TicketAgregarRequest.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaDesactivarResponse.cs" />
     <Compile Include="Modelo\Mensaje\TaquillaDesactivarRequest.cs" />
@@ -89,6 +92,7 @@
   <ItemGroup>
     <Content Include="mmi.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

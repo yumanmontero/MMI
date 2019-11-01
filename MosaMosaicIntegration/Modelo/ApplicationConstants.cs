@@ -34,6 +34,8 @@ namespace MosaMosaicIntegration.Modelo
         public static String TAQUILLA_INACTIVA = "0015";
         public static String TRANSACCION_NO_EXISTE = "0016";
         public static String LISTA_TRANSACCION_VACIA = "0017";
+        public static String TICKET_EXISTE = "0018";
+        public static String TAQUILLA_EXISTE = "0019";
         public static String PETICION_SIN_DATOS = "9000";
         public static String REGISTRO_INVALIDO = "-2";
         public static String ERROR_DE_COMUNICACION = "9999";
@@ -91,6 +93,7 @@ namespace MosaMosaicIntegration.Modelo
         /*Configuracion Aplicacion*/
         public static string serviceEndpoint = "";
         public static string ticketCRUDEndpoint = "/tickets";
+        public static string taquillaCRUDEndpoint = "/taquillas";
         public static string taquillaLogInEndpoint = "/taquilla/activar";
         public static string taquillaLogOutEndpoint = "/taquilla/desactivar";
         public static string taquillaLlamarEndpoint = "/taquilla/proximo";
@@ -99,7 +102,7 @@ namespace MosaMosaicIntegration.Modelo
         public static string transaccionCRUDEndpoint = "/tickets/transaccion";
         public static Boolean modtest = false;
         public static Boolean moddebug = false;
-        public static string timeZone = "America/La_Paz";
+        public static string timeZone = "SA Western Standard Time";
         public static string codTranLogin = "login";
         public static string codTranLogout = "logout";
         public static string codTranCallNext = "callNext";
@@ -111,6 +114,8 @@ namespace MosaMosaicIntegration.Modelo
         public static int timeoutPATCH = 10000;
         public static int timeoutDELETE = 10000;
 
+
+        public static int tcoladeafult = 1;
 
 
     }

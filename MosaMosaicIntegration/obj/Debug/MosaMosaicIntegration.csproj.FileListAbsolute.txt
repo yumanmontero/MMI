@@ -13,6 +13,7 @@ C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\bin\Debug\Newtonsoft.Js
 C:\Users\ymontero\Source\Repos\MMI\MosaMosaicIntegration\obj\Debug\MosaMosaicIntegration.csprojResolveAssemblyReference.cache
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\mmi.xml
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\log4net.config
+C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.dll.config
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.dll
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\MosaMosaicIntegration.pdb
 C:\Users\YUMAN\source\repos\yumanmontero\MMI\MosaMosaicIntegration\bin\Debug\log4net.dll
