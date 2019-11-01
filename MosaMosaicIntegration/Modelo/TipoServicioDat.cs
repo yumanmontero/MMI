@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MosaMosaicIntegration.Controlador;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace MosaMosaicIntegration.Modelo
         public int codtiposervicio { get; set; }
         [JsonProperty("destiposervicio")]
         public String destiposervicio { get; set; }
-        [JsonProperty("fechamodificacion")]
+        [JsonProperty("fechamodificacion"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? fechamodificacion { get; set; }
         [JsonProperty("codestatus")]
         public String codestatus { get; set; }

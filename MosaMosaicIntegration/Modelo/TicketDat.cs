@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MosaMosaicIntegration.Controlador;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace MosaMosaicIntegration.Modelo
         [JsonProperty("codoficina")]
         public long codoficina { get; set; }
         [JsonProperty("codtipocola")]
-        public Int32 codtipocola { get; set; }
+        public Int32? codtipocola { get; set; }
         [JsonProperty("destipocola")]
         public String destipocola { get; set; }
         [JsonProperty("carnetactivacion")]
@@ -24,20 +25,20 @@ namespace MosaMosaicIntegration.Modelo
         [JsonProperty("idcedula")]
         public String idcedula { get; set; }
         [JsonProperty("nrocedula")]
-        public Int32 nrocedula { get; set; }
+        public Int32? nrocedula { get; set; }
         [JsonProperty("nroterminal")]
         public long nroterminal { get; set; }
         [JsonProperty("indatencion")]
         public String indatencion { get; set; }
         [JsonProperty("indactivo")]
         public String indactivo { get; set; }
-        [JsonProperty("fechaatencionD")]
+        [JsonProperty("fechaatencionD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? fechaatencionD { get; set; }
-        [JsonProperty("horallegadaoficD")]
+        [JsonProperty("horallegadaoficD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? horallegadaoficD { get; set; }
-        [JsonProperty("horainiatencionD")]
+        [JsonProperty("horainiatencionD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? horainiatencionD { get; set; }
-        [JsonProperty("horafinatencionD")]
+        [JsonProperty("horafinatencionD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? horafinatencionD { get; set; }
         [JsonProperty("fechaatencion")]
         public String fechaatencion { get; set; }

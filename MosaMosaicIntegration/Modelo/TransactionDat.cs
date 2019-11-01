@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using MosaMosaicIntegration.Controlador;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +18,9 @@ namespace MosaMosaicIntegration.Modelo
         public String fechaatencion { get; set; }
         [JsonProperty("horallegadaofic")]
         public String horallegadaofic { get; set; }
-        [JsonProperty("horallegadaoficD")]
+        [JsonProperty("horallegadaoficD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? horallegadaoficD { get; set; }
-        [JsonProperty("fechaatencionD")]
+        [JsonProperty("fechaatencionD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? fechaatencionD { get; set; }
         [JsonProperty("idcedula")]
         public String idcedula { get; set; }
@@ -27,7 +28,7 @@ namespace MosaMosaicIntegration.Modelo
         public long nrocedula { get; set; }
         [JsonProperty("horafintrx")]
         public string horafintrx { get; set; }
-        [JsonProperty("horafintrxD")]
+        [JsonProperty("horafintrxD"), JsonConverter(typeof(MicrosecondEpochConverter))]
         public DateTime? horafintrxD { get; set; }
         [JsonProperty("montotrx")]
         public Decimal montotrx { get; set; }
