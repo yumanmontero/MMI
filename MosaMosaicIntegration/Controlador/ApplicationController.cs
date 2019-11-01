@@ -246,16 +246,26 @@ namespace MosaMosaicIntegration.Controlador
     
             //ApplicationController.log.Info("Ticket Antes: " + JsonConvert.SerializeObject(trazadat.ticket));
             /*Validar si el ticket existe*/
-            /*Si no viene un nro de ticket en la rafaga significa que estamos en presencia o de un ticket registrado por oficina tipo 2 o de un ticket proveniente de una oficina tipo 1*/
+            /*Si no viene un nro de ticket en la rafaga significa que estamos en presencia o de un ticket registrado por oficina tipo 2 
+             * o de un ticket de abramatic (sin registrar por cualquiera de los modulos de mosa)*/
             if (trazadat.ticket.nroticket == 0)
             {
+                /*Busca ticket generados en oficina tipo 2 de MOSA-KIOSKO*/
                 trazadat.ticket.indactivo = ApplicationConstants.TICKET_NO_ASIGNADO_INDIC_ACTIVA;
                 int tcolaactual = trazadat.ticket.codtipocola.Value;
                 trazadat.ticket.codtipocola = ApplicationConstants.tcoladeafult;
-                ticketOri = cosltTicket(trazadat, true); /*Buscar ticket de oficina tipo 2*/
+                /*Caracteristicas de busqueda Tickets MOSA-KIOSKO(Oficina 2):
+                 nroticket=0
+                 indactivo=A
+                 tipocola=1
+                 allday=true*/
+                ticketOri = cosltTicket(trazadat, true); 
                 if (ticketOri.isValid)
                 {
-                    trazadat.ticket.codtipocola = tcolaactual;
+                    trazadat.ticket.codtipocola = tcolaactual;/*Devuelve al ticket el valor de la cola que venia en la traza*/
+
+                    /*Si el ticket existe, entonces es uno proveniente de MOSA-KIOSKO(Oficina 2)
+                      Por lo que se procede a actualizar los parametros de cierre del ticket*/
                     if (ticketOri.exists)
                     {/*Actualizar*/
                         trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
@@ -272,7 +282,8 @@ namespace MosaMosaicIntegration.Controlador
                             trazadat.ticket.indactivo = "C";
                         }
                         ticketOri = normalizeTimeTicket(ticketOri);
-                        if(ticketOri.horallegadaofic != null)
+                        /*Esta fecha se anula, ya que el ticket creado por MOSA-KIOSKO(Oficina 2) tiene esta fecha, por lo tanto no se debera modificar*/
+                        if (ticketOri.horallegadaofic != null)
                         {
                             trazadat.ticket.horallegadaofic = null;
                             trazadat.ticket.horallegadaoficD = null;
@@ -283,15 +294,25 @@ namespace MosaMosaicIntegration.Controlador
                         redyTicket = true;
                     }
                     else
-                    {/*Busca si el ticket oficina tipo 1 ya no fue procesado*/
+                    {
+                        /*Si el ticket NO existe, entonces es uno que no tiene origen en cualquier de los core MOSA
+                          Por lo que se procede a crearlo si y solo si no existe alguno creado con esas caracteristicas*/
                         trazadat.ticket.indactivo = null;
                         String dateaten = trazadat.ticket.fechaatencion;
                         trazadat.ticket.fechaatencion = trazadat.ticket.horallegadaofic;
+                        /*Caracteristicas de busqueda Tickets NO-ORIGEN MOSA:
+                         nroticket=0
+                         indactivo=null
+                         allday=false
+                         fechaatencion=horallegadaofic=horainicioatencion*/
                         ticketOri = cosltTicket(trazadat, false);
+
+                        
                         if (ticketOri.isValid)
                         {
                             trazadat.ticket.fechaatencion = dateaten;
-                            if (!ticketOri.exists) /*Esto implica que el ticket es de oficina tipo 1 y no ha sido registrado*/
+                            /*Si no encuentra algun ticket con esas caracteristicas, lo crea.*/
+                            if (!ticketOri.exists) 
                             {/*Crea*/
                                 trazadat.ticket.nroticket = trazadat.ticket.nroticketcal;
                                 trazadat.ticket.indactivo ="F";
@@ -305,6 +326,7 @@ namespace MosaMosaicIntegration.Controlador
                             }
                             else
                             {
+                                /*Si ya existe, pasa directo al modulo de validar las transacciones.*/
                                 estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
                                 redyTicket = true;
                             }
@@ -314,10 +336,16 @@ namespace MosaMosaicIntegration.Controlador
                 }
             }else
             {
+                /*Si viene con un numero de ticket en la rafaga, significa que estamos en presencia de un ticket proveniente o de 
+                  MOSA-WEB Activador(Oficina 1) o MOSA-KIOSKO(Oficina 3) o NO-ORIGEN-MOSA*/
+
+                /*Caracteristicas de busqueda Tickets MOSA-WEB Activador(Oficina 1) o MOSA-KIOSKO(Oficina 3) o NO-ORIGEN-MOSA:
+                 allday=true*/
                 ticketOri = cosltTicket(trazadat, true);
                 /*Agrega o Actualiza el ticket*/
                 if (ticketOri.isValid)
                 {
+                    /*Si existe, es un ticket proveniente de MOSA-KIOSKO (Oficina 3), por lo que se procede a actualizar el cierre del ticket*/
                     if (ticketOri.exists)
                     {/*Actualizar*/
                         trazadat.ticket.indatencion = trazadat.ticket.statustransaccion;
@@ -353,7 +381,8 @@ namespace MosaMosaicIntegration.Controlador
                     }
                     else
                     {
-                        /*Preguntar si nos encontramos en presencia de un ticket activado por mosaweb*/
+                        /*Si NO existe, es un ticket proveniente de MOSA-WEB Activador(Oficina 1) o NO-ORIGEN-MOSA, 
+                         * por lo que se procede a actualizar el cierre del ticket*/
                         trazadat.ticket.indactivo = ApplicationConstants.TICKET_NO_ASIGNADO_INDIC_ACTIVA;
                         int tcolaactual = trazadat.ticket.codtipocola.Value;
                         int nrocedula = trazadat.ticket.nrocedula.Value;
@@ -361,12 +390,19 @@ namespace MosaMosaicIntegration.Controlador
                         trazadat.ticket.codtipocola = null;
                         trazadat.ticket.nrocedula = 0;
                         trazadat.ticket.idcedula = "*";
+                        /*Caracteristicas de busqueda Tickets MOSA-WEB Activador(Oficina 1) o NO-ORIGEN-MOSA:
+                         indactivo=A
+                         nrocedula=0
+                         idcedula=*
+                         codtipocola=null
+                         allday=true*/
                         ticketOri = cosltTicket(trazadat, true);
                         if (ticketOri.isValid)
                         {
                             trazadat.ticket.codtipocola = tcolaactual;
                             trazadat.ticket.nrocedula = nrocedula;
                             trazadat.ticket.idcedula = idcedula;
+                            /*Si existe es proveniente de MOSA-WEB Activador(Oficina 1), por lo tanto lo actualiza para el cirre del ticket*/
                             /*Actualiza*/
                             if (ticketOri.exists)
                             {
@@ -400,7 +436,7 @@ namespace MosaMosaicIntegration.Controlador
                                         estatusDat.codigo = ApplicationConstants.TRANSACCION_EXITOSA;
                                     }
                                 }
-                            }/*Crea*/
+                            }/*Si no existe es proveniente de NO-ORIGEN-MOSA, por lo tanto lo crea.*/
                             else
                             {
                                 trazadat.ticket.indactivo = "F";
